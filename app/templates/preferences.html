@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Preferences</title>
+{% endblock %}
+
+{% block body %}
+    <h1>Preferences</h1>
+    <form action="/preferences" method="post" class="preferences-form">
+        <label for="genres">Favorite Genres:</label><br>
+        <input type="checkbox" id="action" name="genres" value="Action">
+        <label for="action">Action</label><br>
+        <input type="checkbox" id="comedy" name="genres" value="Comedy">
+        <label for="comedy">Comedy</label><br>
+        <!-- Add more genres as needed -->
+        <br>
+        <label for="directors">Favorite Directors:</label><br>
+        <input type="checkbox" id="spielberg" name="directors" value="Spielberg">
+        <label for="spielberg">Steven Spielberg</label><br>
+        <input type="checkbox" id="nolan" name="directors" value="Nolan">
+        <label for="nolan">Christopher Nolan</label><br>
+        <!-- Add more directors as needed -->
+        <br>
+        <label for="actors">Favorite Actors:</label><br>
+        <input type="checkbox" id="dicaprio" name="actors" value="DiCaprio">
+        <label for="dicaprio">Leonardo DiCaprio</label><br>
+        <input type="checkbox" id="winslet" name="actors" value="Winslet">
+        <label for="winslet">Kate Winslet</label><br>
+        <!-- Add more actors as needed -->
+        <br>
+        <label for="years">Favorite Movie Release Years:</label><br>
+        <input type="checkbox" id="1990s" name="years" value="1990s">
+        <label for="1990s">1990s</label><br>
+        <input type="checkbox" id="2000s" name="years" value="2000s">
+        <label for="2000s">2000s</label><br>
+        <!-- Add more years as needed -->
+        <br>
+        <input type="submit" value="Submit Preferences">
+    </form>
+{% endblock %}

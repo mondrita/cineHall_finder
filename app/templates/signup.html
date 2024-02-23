@@ -1,0 +1,30 @@
+
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Sign Up</title>
+{% endblock %}
+
+{% block body %}
+    <h1>Sign Up</h1>
+    <div class="empty-lilac-box">
+        <div class="photo-left">
+            <img src="/static/photo.jpg" alt="photo" class="photo">
+        </div>
+        <form action="/signup" method="post" class="signup-form">
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username" required><br>
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email" required><br>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password" required><br><br>
+            <label for="security_question">Security Question: What is your favourite movie of all time?</label><br><br>
+            <label for="security_answer">Security Answer:</label><br>
+            <input type="text" id="security_answer" name="security_answer" required><br>
+            <input type="submit" value="Sign Up">
+        </form>
+        <div class="photo-right">
+            <img src="/static/photo.jpg" alt="photo" class="photo">
+        </div>
+    </div>
+{% endblock %}

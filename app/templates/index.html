@@ -1,0 +1,37 @@
+{%extends 'base.html'%}
+
+{% block head %}
+<title>Theatre Website</title>
+{%endblock%}
+
+{% block body %}
+<h1>WELCOME to CINEHALL FINDER!</h1>
+<div class="btn-container">
+    <a href="/signup" class="btn">Sign Up Here!</a>
+    <a href="/login" class="btn">Log In</a>
+</div>
+<div class="photo-container">
+    <div class="photo-left">
+        <video width="420" height="200" autoplay loop muted>
+            <source src="/static/video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <video width="420" height="200" autoplay loop muted>
+            <source src="/static/video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <img src="/static/photo.jpg" alt="photo" class="photo">
+    <div class="photo-right">
+        <video width="420" height="200" autoplay loop muted>
+            <source src="/static/video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <video width="420" height="200" autoplay loop muted>
+            <source src="/static/video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+</div>
+
+{%endblock%}
