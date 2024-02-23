@@ -1,27 +1,11 @@
 from app import app, db
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for,flash,session
 from app.models import User
 
 
 @app.route('/')
 def index():
     return render_template('index.html')
-
-'''@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    try:
-        if request.method == 'POST':
-            username = request.form.get('username')
-            email = request.form.get('email')
-            password = request.form.get('password')
-            security_answer = request.form.get('security_answer')
-            new_user = User(username=username, email=email, password=password, security_answer=security_answer)
-            User.create_classmethod(username,email,password,security_answer)
-            return redirect(url_for('preferences'))
-        return render_template('signup.html')
-
-    except Exception as e:
-        return {'message':'error'}'''
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -39,8 +23,42 @@ def signup():
 @app.route('/preferences', methods=['GET', 'POST'])
 def preferences():
     if request.method == 'POST':
-        # Code for handling preferences form submission and updating database omitted for brevity
-        # Redirect to dashboard after submitting preferences
-        return redirect(url_for('index'))
+        return redirect(url_for('login'))
 
     return render_template('preferences.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if user and user.password == password:
+            # Authentication successful, store user id in session
+            session['username'] = user.username
+            return redirect(url_for('dashboard', username=user.username))
+        else:
+            flash('Invalid username or password', 'error')
+    return render_template('login.html')
+
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        username = request.form['username']
+        security_answer = request.form['security_answer']
+        user = User.query.filter_by(username=username, security_answer=security_answer).first()
+        if user:
+            # Implement password reset logic
+            return redirect(url_for('dashboard'))
+            
+        else:
+            return "Invalid username or security answer."
+    return render_template('forgot_password.html')
+
+@app.route('/dashboard/<username>', methods=['GET'])
+def dashboard(username):
+    user = User.query.filter_by(username=username).first()
+    if user:
+        return render_template('dashboard.html', user=user)
+    else:
+        return "User not found."

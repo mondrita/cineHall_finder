@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <title>Sign Up</title>
+    <title>LOG IN</title>
     <style>
         .empty-lilac-box {
             display: flex;
@@ -9,18 +9,18 @@
             align-items: center;
             margin-top: 50px;
         }
-        .signup-form {
-            background-color:#92568b;
+        .login-form {
+            background-color: #92568b;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
         }
-        .signup-form label {
+        .login-form label {
             font-weight: bold;
         }
-        .signup-form input[type="text"],
-        .signup-form input[type="email"],
-        .signup-form input[type="password"] {
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -29,41 +29,57 @@
             box-sizing: border-box;
             font-size: 16px;
         }
-        .signup-form input[type="submit"] {
+        .login-form input[type="submit"] {
             width: 100%;
             padding: 10px;
-            background-color: #4b0082;
+            background-color:  #800080;
             color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
         }
-        .signup-form input[type="submit"]:hover {
-            background-color: #4b0082;
+        .login-form input[type="submit"]:hover {
+            background-color:  #800080;
+        }
+        .login-form a {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            text-decoration: none;
+            color: #c2c1c1;
+        }
+        .login-form a:hover {
+            text-decoration: underline;
         }
     </style>
 {% endblock %}
 
 {% block body %}
-    <h1>Sign Up</h1>
-    
+    <h1>Log In!</h1>
+    <div class="empty-lilac-box">
         <div class="photo-left">
             <img src="/static/photo.jpg" alt="photo" class="photo">
         </div>
-        <form action="/signup" method="post" class="signup-form">
+        <form action="/login" method="post" class="login-form">
             <label for="username">Username:</label><br>
             <input type="text" id="username" name="username" required><br>
-            <label for="email">Email:</label><br>
-            <input type="email" id="email" name="email" required><br>
             <label for="password">Password:</label><br>
             <input type="password" id="password" name="password" required><br><br>
-            <label for="security_question">Security Question: What is your favourite movie of all time?</label><br><br>
-            <label for="security_answer">Security Answer:</label><br>
-            <input type="text" id="security_answer" name="security_answer" required><br>
-            <input type="submit" value="Sign Up">
+            <input type="submit" value="Login">
+            <a href="/forgot_password">Forgot password?</a> <!-- Add this line -->
         </form>
         <div class="photo-right">
             <img src="/static/photo.jpg" alt="photo" class="photo">
         </div>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
 {% endblock %}
