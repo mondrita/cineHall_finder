@@ -1,12 +1,118 @@
-
 <!-- dashboard.html -->
 {% extends 'base.html' %}
 
 {% block head %}
     <title>User Dashboard</title>
+    <style>
+        /* CSS for styling the dashboard */
+        h2 {
+            color: #704a7c; /* Dark purple */
+            margin-bottom: 20px;
+        }
+        .dashboard-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .welcome-message {
+            font-size: 35px;
+            margin-bottom: 15px;
+        }
+        .menu-buttons {
+            margin-bottom: 20px;
+        }
+        .menu-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #392f55;
+            color: #fff;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        .menu-button:hover {
+            background-color: #5b506b;
+        }
+        .user-info {
+            background-color: #f0f0f0;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .upcoming-movies {
+            margin-bottom: 20px;
+        }
+
+        .wishlist {
+            background-color: #f0f0f0;
+            padding: 60px;
+        }
+        .movie-box {
+            background-color: #c09ec8;
+            border: 1px solid #9472a1;
+            padding: 10px;
+            margin: 5px; /* Add some margin between each movie box */
+            display: inline-block;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .movie-description {
+            display: none; /* Initially hide the description */
+            position: absolute; /* Position the description relative to the movie box */
+            top: 100%; /* Position the description just below the movie box */
+            left: 0;
+            background-color: #e0d4e3;
+            border: 1px solid #b46bed;
+            padding: 5px;
+            width: 200px; /* Set a fixed width for the description */
+            z-index: 1; /* Ensure the description appears above other elements */
+        }
+
+        .movie-box:hover .movie-description {
+            display: block; /* Show the description when hovering over the movie box */
+        }
+
+    </style>
 {% endblock %}
 
 {% block body %}
-    <h1>Welcome, {{ user.username }}!</h1>
+    <div class="dashboard-container">
+        <!-- Welcome message -->
+        <div class="welcome-message">
+            <h2>Welcome, {{ user.username }}! 🎥🍿📽️</h2>
+        </div>
 
+        <!-- Menu buttons -->
+        <div class="menu-buttons">
+            <a href="{{ url_for('dashboard', username=user.username) }}" class="menu-button">Dashboard</a>
+            <a href="{{ url_for('index') }}" class="menu-button">Find Movies</a>
+            <a href="{{ url_for('index') }}" class="menu-button">Theatre</a>
+        </div>
+
+        <!-- User info -->
+        <div class="user-info">
+            <h2>User Information</h2>
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+        </div>
+
+        <!-- Upcoming movies -->
+        <div class="upcoming_movies">
+            <h2>🎬  Upcoming Movies (2024) 🎬</h2>
+            <div class="movie-container">
+                {% for movie in upcoming_movies %}
+                    <div class="movie-box">
+                        <p>{{ movie[0] }}</p> <!-- Display movie title -->
+                        <div class="movie-description">{{ movie[1] }}</div> <!-- Movie description -->
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+
+        <!-- Wishlist -->
+        <div class="wishlist">
+            <h2>Wishlist</h2>
+            <!-- Add form or functionality for adding movies to wishlist -->
+        </div>
+    </div>
 {% endblock %}

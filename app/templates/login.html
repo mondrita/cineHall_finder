@@ -11,7 +11,7 @@
         }
         .login-form {
             background-color: #92568b;
-            padding: 20px;
+            padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             width: 300px;
@@ -40,7 +40,7 @@
             font-size: 16px;
         }
         .login-form input[type="submit"]:hover {
-            background-color:  #800080;
+            background-color:  #5e125e;
         }
         .login-form a {
             display: block;
@@ -56,12 +56,16 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Log In!</h1>
+<h1>Already an user? Log in Here!</h1><br><br>
+
     <div class="empty-lilac-box">
+        
         <div class="photo-left">
             <img src="/static/photo.jpg" alt="photo" class="photo">
         </div>
+        
         <form action="/login" method="post" class="login-form">
+            <h1>Log in Here!</h1>
             <label for="username">Username:</label><br>
             <input type="text" id="username" name="username" required><br>
             <label for="password">Password:</label><br>
