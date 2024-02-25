@@ -1,37 +1,87 @@
-{%extends 'base.html'%}
+{% extends 'base.html' %}
 
 {% block head %}
 <title>Theatre Website</title>
-{%endblock%}
+<style>
+    /* CSS for positioning the heading */
+    .heading-container {
+        text-align: center;
+        margin-top: -7cm; /* Adjust this value as needed */
+        margin-bottom: 20px;
+    }
+
+    /* CSS for positioning the buttons */
+    .btn-container {
+        text-align: center;
+        margin-top: 4cm; /* Adjust this value as needed */
+    }
+
+    /* CSS for the background image */
+    body {
+        background-image: url('/static/img.jpg'); /* Set the background image */
+        background-size: cover;
+        background-position: center;
+    }
+
+    /* CSS for glowing effect */
+    .glow {
+        animation: glow 2s ease-in-out infinite alternate;
+        color: #884EA0; /* Change text color to #884EA0 */
+    }
+
+    @keyframes glow {
+        from {
+            text-shadow: 0 0 10px #F5EEF8, 0 0 20px #F5EEF8, 0 0 30px #F5EEF8, 0 0 40px #F5EEF8, 0 0 50px #F5EEF8, 0 0 60px #F5EEF8, 0 0 70px #F5EEF8;
+        }
+        to {
+            text-shadow: 0 0 20px #F5EEF8, 0 0 30px #F5EEF8, 0 0 40px #F5EEF8, 0 0 50px #F5EEF8, 0 0 60px #F5EEF8, 0 0 70px #F5EEF8, 0 0 80px #F5EEF8;
+        }
+    }
+
+    /* CSS for videos */
+    video {
+        width: 250px; /* Adjust width as needed */
+        height: 125px; /* Adjust height as needed */
+    }
+
+    /* CSS for buttons */
+    .btn {
+        font-size: 20px; /* Adjust font size as needed */
+        padding: 10px 20px; /* Adjust padding as needed */
+    }
+</style>
+{% endblock %}
 
 {% block body %}
-<h1>WELCOME to CINEHALL FINDER!</h1>
+<div class="heading-container">
+    <h1 class="glow">WELCOME to CINEHALL FINDER!</h1><br><br><br><br><br><br>
+</div>
 <div class="btn-container">
     <a href="/signup" class="btn">Sign Up Here!</a>
     <a href="/login" class="btn">Log In</a>
 </div>
 <div class="photo-container">
     <div class="photo-left">
-        <video width="420" height="200" autoplay loop muted>
+        <video autoplay loop muted>
             <source src="/static/video.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-        <video width="420" height="200" autoplay loop muted>
+        <video autoplay loop muted>
             <source src="/static/video.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </div>
-    <img src="/static/photo.jpg" alt="photo" class="photo">
+
+    
     <div class="photo-right">
-        <video width="420" height="200" autoplay loop muted>
+        <video autoplay loop muted>
             <source src="/static/video.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-        <video width="420" height="200" autoplay loop muted>
+        <video autoplay loop muted>
             <source src="/static/video.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </div>
 </div>
-
-{%endblock%}
+{% endblock %}

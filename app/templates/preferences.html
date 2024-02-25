@@ -1,40 +1,239 @@
-{% extends 'base.html' %}
-
-{% block head %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Preferences</title>
-{% endblock %}
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #C39BD3  ;
+        }
 
-{% block body %}
-    <h1>Preferences</h1>
-    <form action="/preferences" method="post" class="preferences-form">
-        <label for="genres">Favorite Genres:</label><br>
-        <input type="checkbox" id="action" name="genres" value="Action">
-        <label for="action">Action</label><br>
-        <input type="checkbox" id="comedy" name="genres" value="Comedy">
-        <label for="comedy">Comedy</label><br>
-        <!-- Add more genres as needed -->
-        <br>
-        <label for="directors">Favorite Directors:</label><br>
-        <input type="checkbox" id="spielberg" name="directors" value="Spielberg">
-        <label for="spielberg">Steven Spielberg</label><br>
-        <input type="checkbox" id="nolan" name="directors" value="Nolan">
-        <label for="nolan">Christopher Nolan</label><br>
-        <!-- Add more directors as needed -->
-        <br>
-        <label for="actors">Favorite Actors:</label><br>
-        <input type="checkbox" id="dicaprio" name="actors" value="DiCaprio">
-        <label for="dicaprio">Leonardo DiCaprio</label><br>
-        <input type="checkbox" id="winslet" name="actors" value="Winslet">
-        <label for="winslet">Kate Winslet</label><br>
-        <!-- Add more actors as needed -->
-        <br>
-        <label for="years">Favorite Movie Release Years:</label><br>
-        <input type="checkbox" id="1990s" name="years" value="1990s">
-        <label for="1990s">1990s</label><br>
-        <input type="checkbox" id="2000s" name="years" value="2000s">
-        <label for="2000s">2000s</label><br>
-        <!-- Add more years as needed -->
-        <br>
-        <input type="submit" value="Submit Preferences">
-    </form>
-{% endblock %}
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #EBDEF0  ; /* Light purple */
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #6a5acd; /* Lilac */
+        }
+
+        label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .preferences-form {
+            margin-top: 20px;
+        }
+
+        .checkbox-group {
+            margin-bottom: 30px;
+        }
+
+        input[type="checkbox"] {
+            display: none;
+        }
+
+        input[type="checkbox"] + label {
+            display: inline-block;
+            padding: 12px 20px;
+            margin-right: 50px;
+            background-color: #C39BD3; /* Light purple */
+            color: #555; /* Adjusted color */
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="checkbox"]:checked + label {
+            background-color: #5B2C6F; 
+            color: #fff; /* White */
+        }
+
+        img {
+            max-width: 60px;
+            margin-left: 20px;
+            margin-right: 70px; /* Added margin-right */
+            vertical-align: middle;
+            border-radius: 5px; /* Adjusted border-radius */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-top: 40px;
+            background-color: #6C3483;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-button:hover {
+            background-color: #A235A7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Movie Preferences</h1><br>
+        <form action="/preferences" method="post" class="preferences-form">
+            <div class="checkbox-group">
+                <label for="genres">FAVORITE GENRES:</label><br><br><br>
+                <input type="checkbox" id="action" name="genres" value="Action">
+                <label for="action">Action</label>
+                <input type="checkbox" id="comedy" name="genres" value="Comedy">
+                <label for="comedy">Comedy</label>
+                <input type="checkbox" id="drama" name="genres" value="Drama">
+                <label for="drama">Drama</label>
+                <input type="checkbox" id="thriller" name="genres" value="Thriller">
+                <label for="thriller">Thriller</label>
+                <input type="checkbox" id="adventure" name="genres" value="Adventure">
+                <label for="adventure">Adventure</label> <br><br><hr>
+            </div>
+            
+            <div class="checkbox-group">
+                <label for="directors">FAVORITE DIRECTORS:</label><br><br><br>
+                <input type="checkbox" id="spielberg" name="directors" value="Spielberg">
+                <label for="spielberg">Steven Spielberg</label> 
+                <img src="/static/spielberg.jpg" alt="Steven Spielberg"> 
+
+                <input type="checkbox" id="tarantino" name="directors" value="Tarantino">
+                <label for="tarantino" style="margin-bottom: 30px;">Quentin Tarantino</label>
+                <img src="/static/tarantino.jpg" alt="Quentin Tarantino"> <br>
+
+                <input type="checkbox" id="scorsese" name="directors" value="Scorsese">
+                <label for="scorsese">Martin Scorsese</label>
+                <img src="/static/scorsese.jpg" alt="Martin Scorsese"> 
+
+                <input type="checkbox" id="fincher" name="directors" value="Fincher">
+                <label for="fincher">David Fincher</label>
+                <img src="/static/fincher.jpg" alt="David Fincher"> <br><br>
+
+                <input type="checkbox" id="greta" name="directors" value="Greta">
+                <label for="greta">Greta Gerwig</label>
+                <img src="/static/greta.jpg" alt="Greta Gerwig"> 
+
+                <input type="checkbox" id="nora" name="directors" value="Nora">
+                <label for="nora">Nora Ephron</label>
+                <img src="/static/nora.jpg" alt="Nora Ephron"> <br><br>
+
+                <input type="checkbox" id="satyajit" name="directors" value="Satyajit">
+                <label for="satyajit">Satyajit Ray</label>
+                <img src="/static/satyajit.jpg" alt="Satyajit Ray">
+
+                <input type="checkbox" id="rituparno" name="directors" value="Rituparno">
+                <label for="rituparno">Rituparno Ghosh</label>
+                <img src="/static/rituparno.jpg" alt="Rituparno Ghosh"> <br><br>
+
+                <input type="checkbox" id="anurag" name="directors" value="anurag">
+                <label for="anurag">Anurag Kashyap</label>
+                <img src="/static/anurag.jpg" alt="Anurag Kashyap">
+
+                <input type="checkbox" id="sanjay" name="directors" value="Sanjay">
+                <label for="sanjay">Sanjay Leela Bhansali</label>
+                <img src="/static/sanjay.jpg" alt="Nora Ephron"> <br><br><hr>
+            </div>
+            
+          
+            
+            <div class="checkbox-group">
+                <label for="actors">FAVORITE ACTORS:</label><br><br><br>
+                <input type="checkbox" id="leo" name="actors" value="Leo">
+                <label for="leo">Leonardo DiCaprio</label>
+                <img src="/static/leo.jpg" alt="Leonardo DiCaprio">
+
+                <input type="checkbox" id="hanks" name="actors" value="Hanks">
+                <label for="hanks">Tom Hanks</label>
+                <img src="/static/hanks.jpg" alt="Tom Hanks"> <br><br>
+
+                <input type="checkbox" id="kate" name="actors" value="Kate">
+                <label for="kate">Kate Winslet</label>
+                <img src="/static/kate.jpg" alt="Kate Winslet">
+
+                <input type="checkbox" id="aniston" name="actors" value="Jennifer Aniston">
+                <label for="aniston">Jennifer Aniston</label>
+                <img src="/static/aniston.jpg" alt="Aniston"> <br><br>
+
+                <input type="checkbox" id="niro" name="actors" value="Niro">
+                <label for="niro">Robert De Niro</label>
+                <img src="/static/niro.jpg" alt="Robert De Niro">
+
+                <input type="checkbox" id="al" name="actors" value="Al">
+                <label for="al">Al Pacino</label>
+                <img src="/static/al.jpg" alt="Al Pacino"> <br><br>
+
+                <input type="checkbox" id="anne" name="actors" value="Anne">
+                <label for="anne">Anne Hathaway</label>
+                <img src="/static/anne.jpg" alt="Anne Hathaway">
+
+                <input type="checkbox" id="emma" name="actors" value="Emma">
+                <label for="emma">Emma Watson</label>
+                <img src="/static/emma.jpg" alt="Emma Watson"> <br><br>
+
+                <input type="checkbox" id="keanu" name="actors" value="Keanu">
+                <label for="keanu">Keanu Reeves</label>
+                <img src="/static/keanu.jpg" alt="Keanu Reeves">
+
+                <input type="checkbox" id="clooney" name="actors" value="Clooney">
+                <label for="clooney">George Clooney</label>
+                <img src="/static/clooney.jpg" alt="George Clooney"> <br><br>
+
+                <input type="checkbox" id="scarjo" name="actors" value="Scarjo">
+                <label for="scarjo">Scarlett Johansson</label>
+                <img src="/static/scarjo.jpg" alt="Scarlett Johansson">
+
+                <input type="checkbox" id="salma" name="actors" value="Salma">
+                <label for="salma">Salma Hayek</label>
+                <img src="/static/salma.jpg" alt="Salma Hayek"> <br><br>
+
+                <input type="checkbox" id="shah" name="actors" value="Shah">
+                <label for="shah">Shah Rukh Khan</label>
+                <img src="/static/shah.jpg" alt="Shah Rukh Khan">
+
+                <input type="checkbox" id="aamir" name="actors" value="Aamir">
+                <label for="aamir">Aamir Khan</label>
+                <img src="/static/aamir.jpg" alt="Aamir Khan"> <br><br>
+
+                <input type="checkbox" id="deepika" name="actors" value="Deepika">
+                <label for="deepika">Deepika Padukone</label>
+                <img src="/static/deepika.jpg" alt="Deepika Padukone">
+
+                <input type="checkbox" id="alia" name="actors" value="Alia">
+                <label for="alia">Alia Bhatt</label>
+                <img src="/static/alia.jpg" alt="Alia Bhatt"> <br><br><hr>
+
+            </div>
+            
+            <div class="checkbox-group">
+                <label for="years">FAVORITE MOVIE RELEASE YEAR:</label><br><br><br>
+                <input type="checkbox" id="1990s" name="years" value="1990s">
+                <label for="1990s">1990s</label>
+                <input type="checkbox" id="2000s" name="years" value="2000s">
+                <label for="2000s">2000s</label>
+                <input type="checkbox" id="2010s" name="years" value="2010s">
+                <label for="2010s">2010s</label>
+                <input type="checkbox" id="2020s" name="years" value="2020s">
+                <label for="2020s">2020s</label>
+            </div>
+            
+            <input type="submit" value="Submit Preferences" class="submit-button">
+        </form>
+    </div>
+</body>
+</html>
