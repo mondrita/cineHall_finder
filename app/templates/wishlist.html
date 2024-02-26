@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #dfc5eb;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #704a7c;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .menu {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .menu-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #392f55;
+            color: #fff;
+            text-decoration: none;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+
+        .menu-button:hover {
+            background-color: #5b506b;
+        }
+
+        .movie-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .movie-box {
+            background-color: #c09ec8;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .movie-title {
+            color: #fff;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu buttons -->
+    <div class="menu">
+        <a href="{{ url_for('dashboard', username=session.username) }}" class="menu-button">Dashboard</a>
+        <a href="{{ url_for('index') }}" class="menu-button">Find Movies</a>
+        <a href="{{ url_for('index') }}" class="menu-button">Theatre</a>
+        <a href="{{ url_for('wishlist_page', username=user.username) }}" class="menu-button">Watchlist</a>
+    </div>
+
+    <h1>Wishlist for {{ user.username }}</h1>
+    <div class="movie-container">
+        {% for entry in wishlist_data %}
+            <div class="movie-box">
+                <p class="movie-title">{{ entry.movie.Title }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

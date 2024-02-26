@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Movies</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .movie-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .movie-item {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+        }
+
+        .movie-item:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .movie-item img {
+            width: 100px;
+            height: auto;
+            margin-right: 20px;
+        }
+
+        .movie-title {
+            font-weight: bold;
+        }
+
+        .pagination {
+            text-align: center;
+        }
+
+        .pagination a {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 0 5px;
+            background-color: #008CBA;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .pagination a:hover {
+            background-color: #005F6B;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>All Movies</h1>
+
+        <ul class="movie-list">
+            <!-- Python code to fetch and display movies here -->
+            {% for movie in movies %}
+                <li class="movie-item">
+                    <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                    <div>
+                        <span class="movie-title">{{ movie.title }}</span><br>
+                        <span>{{ movie.genre }}</span><br>
+                        <span>Released: {{ movie.year }}</span>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="?page={{ page - 1 }}">Previous</a>
+            {% endif %}
+
+            {% if total_pages > page %}
+                <a href="?page={{ page + 1 }}">Next</a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,7 +1,8 @@
 from app import app, db
-from flask import render_template, request, redirect, url_for,flash,session
-from app.models import User
-from sqlalchemy.sql import text
+from flask import render_template, request, redirect, url_for,flash,session,jsonify
+from app.models import User, Movie_Data, Wishlist
+from sqlalchemy.sql import text,or_
+
 
 @app.route('/')
 def index():
@@ -55,27 +56,88 @@ def forgot_password():
             return "Invalid username or security answer."
     return render_template('forgot_password.html')
 
-@app.route('/dashboard/<username>', methods=['GET'])
+@app.route('/dashboard/<username>', methods=['GET', 'POST'])
 def dashboard(username):
     user = User.query.filter_by(username=username).first()
     if user:
-        # Fetch user information
         user_info = {'username': user.username, 'email': user.email}
-
-        # Fetch upcoming movies (year 2024) from the Movie_Data table using raw SQL query
         query = text("SELECT Title, Description FROM Movie_Data WHERE Year = 2024 LIMIT 5")
         result = db.session.execute(query)
         upcoming_movies = result.fetchall()
-
-        # Print the fetched movies for debugging
-        for movie in upcoming_movies:
-            print("Title:", movie[0])
-            print("Description:", movie[1])
-            print("-----------")
-
-        # Convert the result into a list of tuples for easier access in the template
         upcoming_movies_list = upcoming_movies
 
         return render_template('dashboard.html', user=user_info, upcoming_movies=upcoming_movies_list)
+    else:
+        return "User not found."
+    
+
+'''@app.route('/search_movies/<username>', methods=['GET', 'POST'])
+def search_movies(username):
+    if request.method == 'GET':
+        query = request.args.get('query')
+        if query:
+            # Perform the search query
+            search_results = Movie_Data.query.filter(Movie_Data.Title.ilike(f'%{query}%')).all()
+            return render_template('search_results.html', user=username, search_results=search_results)
+        else:
+            # If no query is provided, return an empty list
+            return render_template('search_results.html', user=username, search_results=[])
+    else:
+        return "Invalid request method."'''
+
+@app.route('/search_movies/<username>', methods=['GET', 'POST'])
+def search_movies(username):
+    if request.method == 'GET':
+        query = request.args.get('query')
+        if query:
+            # Perform the search query
+            search_results = Movie_Data.query.filter(Movie_Data.Title.ilike(f'%{query}%')).all()
+            return render_template('search_results.html', user=username, search_results=search_results)
+        else:
+            # If no query is provided, return an empty list
+            return render_template('search_results.html', user=username, search_results=[])
+    elif request.method == 'POST':
+        # Get the movie rank from the form data
+        movie_rank = request.form.get('movie_rank')
+        if movie_rank:
+            # Find the movie in the database
+            movie = Movie_Data.query.filter_by(Rank=movie_rank).first()
+            if movie:
+                # Add the movie to the user's wishlist
+                user = User.query.filter_by(username=username).first()
+                if user:
+                    wishlist_entry = Wishlist(user_id=user.id, movie_rank=movie.Rank)
+                    db.session.add(wishlist_entry)
+                    db.session.commit()
+                    #return jsonify({'message': 'Movie added to wishlist successfully'})
+                    return redirect(url_for('search_movies', username=user.username)) 
+                else:
+                    return jsonify({'error': 'User not found'}), 404
+            else:
+                return jsonify({'error': 'Movie not found'}), 404
+        else:
+            return jsonify({'error': 'Invalid request'}), 400
+    else:
+        return jsonify({'error': 'Invalid request method'}), 405
+
+
+def get_wishlist_data(username):
+    # Query the database to fetch wishlist data for the user with the given username
+    user = User.query.filter_by(username=username).first()
+    if user:
+        wishlist_data = Wishlist.query.filter_by(user_id=user.id).all()
+        return wishlist_data
+    else:
+        return []  
+
+@app.route('/wishlist_page/<username>', methods=['GET', 'POST'])
+def wishlist_page(username):
+    user = User.query.filter_by(username=username).first()
+    if user:
+        wishlist_data = get_wishlist_data(username)
+        # Fetch movie details for each wishlist entry
+        for entry in wishlist_data:
+            entry.movie = Movie_Data.query.filter_by(Rank=entry.movie_rank).first()
+        return render_template('wishlist.html', user=user, wishlist_data=wishlist_data)
     else:
         return "User not found."

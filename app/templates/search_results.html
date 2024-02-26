@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #bba1bd;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #704a7c;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        li {
+            background-color: #d4a9d2;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        li:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: #392f55;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #5b506b;
+        }
+
+        form {
+            display: inline; /* Prevent form from taking full width */
+        }
+
+        /* Styling for menu buttons */
+        .menu {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .menu-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #392f55;
+            color: #fff;
+            text-decoration: none;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+
+        .menu-button:hover {
+            background-color: #5b506b;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu">
+        <a href="{{ url_for('dashboard', username=session.username) }}" class="menu-button">Dashboard</a>
+    </div>
+    <h1>Search Results</h1>
+    <ul>
+        {% for movie in search_results %}
+            <li>{{ movie.Title }} 
+                <form action="{{ url_for('search_movies', username=user) }}" method="POST">
+                    <input type="hidden" name="movie_rank" value="{{ movie.Rank }}">
+                    <button type="submit">Add to Watchlist</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

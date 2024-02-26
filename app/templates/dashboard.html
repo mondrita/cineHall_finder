@@ -71,6 +71,37 @@
             display: block; /* Show the description when hovering over the movie box */
         }
 
+        /* Styling for the search form */
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        .search-container h2 {
+            margin-bottom: 10px; /* Add margin below the heading */
+        }
+
+        .search-container input[type=text] {
+            width: 100%; /* Take up full width */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 10px; /* Add margin below the input */
+        }
+
+        .search-container button {
+            display: block; /* Display as block element */
+            padding: 10px 20px;
+            background-color: #392f55;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-container button:hover {
+            background-color: #5b506b;
+        }
     </style>
 {% endblock %}
 
@@ -83,9 +114,10 @@
 
         <!-- Menu buttons -->
         <div class="menu-buttons">
-            <a href="{{ url_for('dashboard', username=user.username) }}" class="menu-button">Dashboard</a>
+            <a href="{{ url_for('dashboard', username=session.username) }}" class="menu-button">Dashboard</a>
             <a href="{{ url_for('index') }}" class="menu-button">Find Movies</a>
             <a href="{{ url_for('index') }}" class="menu-button">Theatre</a>
+            <a href="{{ url_for('wishlist_page', username=user.username) }}" class="menu-button">Watchlist</a>
         </div>
 
         <!-- User info -->
@@ -108,11 +140,14 @@
             </div>
         </div>
 
-
-        <!-- Wishlist -->
-        <div class="wishlist">
-            <h2>Wishlist</h2>
-            <!-- Add form or functionality for adding movies to wishlist -->
+        <!-- Add a search form with heading -->
+        <div class="search-container">
+            <h2>Search Movies to Add to Watchlist 📺</h2>
+            <form action="{{ url_for('search_movies', username=user.username) }}" method="GET">
+                <input type="text" name="query" placeholder="Search movies...">
+                <button type="submit">Search</button>
+            </form>
         </div>
+
     </div>
 {% endblock %}
