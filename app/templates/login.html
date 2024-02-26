@@ -58,14 +58,14 @@
 {% block body %}
 <h1>Already an user? Log in Here!</h1><br><br>
 
-    <div class="empty-lilac-box">
+    
         
         <div class="photo-left">
             <img src="/static/photo.jpg" alt="photo" class="photo">
         </div>
         
         <form action="/login" method="post" class="login-form">
-            <h1>Log in Here!</h1>
+            
             <label for="username">Username:</label><br>
             <input type="text" id="username" name="username" required><br>
             <label for="password">Password:</label><br>
@@ -76,7 +76,7 @@
         <div class="photo-right">
             <img src="/static/photo.jpg" alt="photo" class="photo">
         </div>
-    </div>
+    
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <ul>

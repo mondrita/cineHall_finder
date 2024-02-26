@@ -1,7 +1,10 @@
 from app import app, db
 from flask import render_template, request, redirect, url_for,flash,session
 from app.models import User
+from app.models import Movie_Data
 from sqlalchemy.sql import text
+from math import ceil
+
 
 @app.route('/')
 def index():
@@ -79,3 +82,14 @@ def dashboard(username):
         return render_template('dashboard.html', user=user_info, upcoming_movies=upcoming_movies_list)
     else:
         return "User not found."
+
+@app.route('/show_movies', methods=['GET'])
+def show_movies():
+    # Pagination parameters
+    page = request.args.get('page', 1, type=int)
+    per_page = 20
+    
+    # Query database to get movies for the current page
+    movies = Movie_Data.query.paginate(page=page, per_page=per_page)
+    total_pages = ceil(movies.total / per_page)
+    return render_template('show_movies.html', movies=movies,page=page,total_pages=total_pages)
