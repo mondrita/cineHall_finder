@@ -11,14 +11,6 @@ class User(db.Model):
 
 
 
-class Movie_Data(db.Model):
-    __tablename__ = 'Movie_Data'
-    Title = db.Column(db.String(100), primary_key=True)
-    Genre = db.Column(db.String(100), nullable=False)
-    Description = db.Column(db.Text, nullable=False)
-    Director = db.Column(db.String(100), nullable=False)
-    Actors = db.Column(db.String(255), nullable=False)
-
 
 
     #def __repr__(self):
