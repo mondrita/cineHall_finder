@@ -2,6 +2,7 @@ from app import app, db
 from flask import render_template, request, redirect, url_for,flash,session,jsonify
 from app.models import User, Movie_Data, Wishlist
 from sqlalchemy.sql import text,or_
+from math import ceil 
 
 
 @app.route('/')
@@ -141,3 +142,92 @@ def wishlist_page(username):
         return render_template('wishlist.html', user=user, wishlist_data=wishlist_data)
     else:
         return "User not found."
+
+'''@app.route('/show_movies', methods=['GET'])
+def show_movies():
+    # Pagination parameters
+    page = request.args.get('page', 1, type=int)
+    per_page = 20
+    
+    # Query database to get movies for the current page
+    movies = Movie_Data.query.paginate(page=page, per_page=per_page)
+
+    # Calculate total number of pages
+    total_pages = ceil(movies.total / per_page)
+
+    return render_template('show_movies.html', movies=movies, page=page, total_pages=total_pages)'''
+
+@app.route('/movie/<string:Rank>')
+def movie_page(Rank):
+    # Retrieve the movie details from the database based on the product ID
+    movie = Movie_Data.query.filter_by(Rank=Rank).first()
+    if movie is None:
+        abort(404)
+    return render_template('movie.html', movie=movie)
+
+@app.route('/movie/<string:Rank>/rate_review', methods=['GET', 'POST'])
+def movie_rating_review(Rank):
+    if request.method == 'POST':
+        rating = request.form.get('rating')
+        review = request.form.get('review')
+        # Process rating and review data, e.g., save to database
+        return 'Rating: {}, Review: {}'.format(rating, review)
+    return render_template('rate_review.html', Rank=Rank)
+
+
+@app.route('/search', methods=['GET'])
+def search():
+    # Get the search query from the request
+    query = request.args.get('query', '')
+
+    # Get filter options from the request
+    Genre = request.args.get('Genre')
+    Actor = request.args.get('Actor')
+    Rating = request.args.get('Rating')
+
+    # Pagination parameters
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+
+    # Base query for products
+    query_base = Movie_Data.query
+
+    # Apply filters if provided
+    if Actor:
+        # Split the actor string and filter by each individual actor
+        actors = Actor.split(", ")
+        actor_filters = [Movie_Data.Actors.ilike(f'%{actor}%') for actor in actors]
+        query_base = query_base.filter(or_(*actor_filters))
+
+    if Genre:
+        # Split the genre string and filter by each individual genre
+        genres = Genre.split(",")
+        genre_filters = [Movie_Data.Genre.ilike(f'%{genre}%') for genre in genres]
+        query_base = query_base.filter(or_(*genre_filters))
+
+    if Rating:
+        query_base = query_base.filter(Movie_Data.Rating >= int(Rating))
+
+    # Filter products based on search query
+    if query:
+        # If both query and filters are provided, filter by both
+        query_results = query_base.filter(or_(Movie_Data.Title.ilike(f'%{query}%'), Movie_Data.Description.ilike(f'%{query}%')))
+    else:
+        # If only filters are provided, use filtered query
+        query_results = query_base
+
+    # Paginate the results
+    movies = query_results.paginate(page=page, per_page=per_page)
+
+    # Calculate total number of pages
+    total_pages = movies.total // per_page + (movies.total % per_page > 0)
+
+    # Fetch unique genres and actors from the database
+    genres = set()
+    actors = set()
+    for movie in movies.items:
+        genres.update(movie.Genre.split(","))
+        actors.update(movie.Actors.split(", "))
+        actors.update(movie.Actors.split(","))
+
+    return render_template('show_movies.html', movies=movies, page=page, total_pages=total_pages, genres=genres, actors=actors)
