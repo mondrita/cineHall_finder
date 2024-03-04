@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color: #C8A2C8;
             margin: 0;
             padding: 20px;
         }
@@ -15,7 +15,7 @@
         .container {
             max-width: 600px;
             margin: 0 auto;
-            background-color: #fff;
+            background-color: #e2dfe3;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -28,6 +28,8 @@
 
         .rating-form {
             text-align: center;
+            display: flex;
+            flex-direction: row-reverse;
         }
 
         .rating-input {
@@ -42,7 +44,7 @@
         label:before {
             content: "\2605"; /* Unicode star character */
             font-size: 30px;
-            color: #ddd;
+            color: #766c7d;
         }
 
         label:hover:before,
@@ -60,7 +62,7 @@
         }
 
         .submit-btn {
-            background-color: #008CBA;
+            background-color: #622A77;
             color: #fff;
             padding: 10px 20px;
             border: none;
@@ -71,7 +73,7 @@
         }
 
         .submit-btn:hover {
-            background-color: #005F6B;
+            background-color: #49195b;
         }
     </style>
 </head>
@@ -79,15 +81,15 @@
     <div class="container">
         <h1>Rate and Review this Movie</h1>
         <form class="rating-form" action="/movie/{{ Rank }}/rate_review" method="POST">
-            <input class="rating-input" type="radio" id="star1" name="rating" value="1">
+            <input class="rating-input" type="radio" id="star5" name="rating" value="1">
             <label for="star1">&#9733;</label>
-            <input class="rating-input" type="radio" id="star2" name="rating" value="2">
+            <input class="rating-input" type="radio" id="star4" name="rating" value="2">
             <label for="star2">&#9733;</label>
             <input class="rating-input" type="radio" id="star3" name="rating" value="3">
             <label for="star3">&#9733;</label>
-            <input class="rating-input" type="radio" id="star4" name="rating" value="4">
+            <input class="rating-input" type="radio" id="star2" name="rating" value="4">
             <label for="star4">&#9733;</label>
-            <input class="rating-input" type="radio" id="star5" name="rating" value="5">
+            <input class="rating-input" type="radio" id="star1" name="rating" value="5">
             <label for="star5">&#9733;</label>
             <textarea class="review-input" name="review" rows="5" placeholder="Write your review here..."></textarea>
             <button class="submit-btn" type="submit">Submit</button>
