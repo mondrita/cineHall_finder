@@ -8,32 +8,34 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
-            background-color: #f2f2f2;
+            background-color: #f4c3f5;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #fff;
+            background-color: #b2d5f0;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center; /* Align content in the center */
         }
 
         .movie-list {
             list-style: none;
             padding: 0;
+            margin-top: 20px; /* Add margin between heading and movie list */
         }
 
         .movie-item {
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
+            padding: 20px; /* Increase padding for larger gaps */
+            border-bottom: 1px solid #e3b7da;
             display: flex;
             align-items: center;
         }
 
         .movie-item:nth-child(even) {
-            background-color: #f9f9f9;
+            background-color: #afe3f1;
         }
 
         .movie-item img {
@@ -48,19 +50,62 @@
 
         .pagination {
             text-align: center;
+            margin-top: 20px;
         }
 
         .pagination a {
             display: inline-block;
-            padding: 5px 10px;
+            padding: 8px 16px;
             margin: 0 5px;
             background-color: #008CBA;
             color: #fff;
             text-decoration: none;
             border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
 
         .pagination a:hover {
+            background-color: #005F6B;
+        }
+
+        .search-form {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-input {
+            padding: 8px;
+            width: 60%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .search-button {
+            padding: 8px 16px;
+            background-color: #008CBA;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-button:hover {
+            background-color: #005F6B;
+        }
+
+        .view-details-btn {
+            background-color: #008CBA;
+            color: #fff;
+            padding: 6px 12px; /* Smaller padding */
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            margin-left: 10px; /* Add margin to the left */
+        }
+
+        .view-details-btn:hover {
             background-color: #005F6B;
         }
     </style>
@@ -69,26 +114,53 @@
     <div class="container">
         <h1>All Movies</h1>
 
+        <!-- Search form -->
+        <form class="search-form" action="/search" method="GET">
+            <input class="search-input" type="text" name="query" placeholder="Search Movies...">
+            <button class="search-button" type="submit">Search</button>
+        </form>
+
+         <!-- Search form with filters -->
+         <form class="search-form" action="/search" method="GET">
+            <!-- <input class="search-input" type="text" name="query" placeholder="Search products..."> -->
+            <select class="filter-input" name="Genre" id="Genre">
+                <option value="">Select Genre</option>
+                {% for Genre in genres %}
+                    <option value="{{ Genre }}">{{ Genre }}</option>
+                {% endfor %}
+            </select>
+            <select class="filter-input" name="Actor" id="Actor">
+                <option value="">Select Actor</option>
+                {% for Actor in actors %}
+                    <option value="{{ Actor }}">{{ Actor }}</option>
+                {% endfor %}
+            </select>
+            <label for="Rating">Item Star:</label>
+            <input class="filter-input" type="number" name="Rating" id="Rating" min="0" max="5">
+            <button class="search-button" type="submit">Search</button>
+        </form>
+
         <ul class="movie-list">
-            <!-- Python code to fetch and display movies here -->
-            {% for movie in movies %}
+            <!-- Loop over movies and display movie titles -->
+            {% for movie in movies.items %}
                 <li class="movie-item">
-                    <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-                    <div>
-                        <span class="movie-title">{{ movie.title }}</span><br>
-                        <span>{{ movie.genre }}</span><br>
-                        <span>Released: {{ movie.year }}</span>
-                    </div>
+                    <!-- Display movie title -->
+                    <span class="movie-title">{{ movie.Title }}</span><br>
+                    
+                    <a href="/movie/{{ movie.Rank }}" class="view-details-btn">View Details</a>
+                    
                 </li>
             {% endfor %}
         </ul>
 
         <div class="pagination">
-            {% if page > 1 %}
+            {% if movies.has_prev %}
                 <a href="?page={{ page - 1 }}">Previous</a>
             {% endif %}
 
-            {% if total_pages > page %}
+            Page {{ page }} of {{ total_pages }}
+
+            {% if movies.has_next %}
                 <a href="?page={{ page + 1 }}">Next</a>
             {% endif %}
         </div>
