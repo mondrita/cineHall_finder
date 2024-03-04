@@ -139,7 +139,18 @@
                 {% endfor %}
             </div>
         </div>
-
+        <!-- Recommended movies -->
+        <div class="recommended_movies">
+            <h2>🌟  Recommended Movies 🌟</h2>
+            <div class="movie-container">
+                {% for movie in recommended_movies %}
+                    <div class="movie-box">
+                        <p>{{ movie.Title }}</p> <!-- Display movie title -->
+                        <div class="movie-description">{{ movie.Description }}</div> <!-- Movie description -->
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
         <!-- Add a search form with heading -->
         <div class="search-container">
             <h2>Search Movies to Add to Watchlist 📺</h2>

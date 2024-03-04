@@ -1,7 +1,7 @@
 from app import app, db
 from flask import render_template, request, redirect, url_for,flash,session,jsonify
-from app.models import User, Movie_Data, Wishlist
-from sqlalchemy.sql import text,or_
+from app.models import User, Movie_Data, Wishlist, UserPreferences
+from sqlalchemy.sql import text,or_,func
 from math import ceil 
 
 
@@ -20,14 +20,30 @@ def signup():
         new_user = User(username=username, email=email, password=password,security_answer=security_answer)
         db.session.add(new_user)
         db.session.commit()
+        session['username'] = username
         return redirect(url_for('preferences'))
     return render_template('signup.html')
+
 @app.route('/preferences', methods=['GET', 'POST'])
 def preferences():
+    username = session.get('username')
     if request.method == 'POST':
+        user = User.query.filter_by(username=username).first() # Assuming you're using Flask-Login for user authentication
+        genre = request.form.getlist('genres')  # Assuming multiple genres can be selected
+        director = request.form.getlist('directors')  # Assuming multiple directors can be selected
+        actor = request.form.getlist('actors')  # Assuming multiple actors can be selected
+        year = request.form.getlist('years')  # Assuming multiple years can be selected
+        # Create a new UserPreferences object and add it to the database for each preference selected
+        for g in genre:
+            for d in director:
+                for a in actor:
+                    for y in year:
+                        preferences = UserPreferences(user_id=user.id, genre=g, director=d, actor=a, year=y)
+                        db.session.add(preferences)
+        db.session.commit()
         return redirect(url_for('login'))
-
     return render_template('preferences.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -57,7 +73,7 @@ def forgot_password():
             return "Invalid username or security answer."
     return render_template('forgot_password.html')
 
-@app.route('/dashboard/<username>', methods=['GET', 'POST'])
+'''@app.route('/dashboard/<username>', methods=['GET', 'POST'])
 def dashboard(username):
     user = User.query.filter_by(username=username).first()
     if user:
@@ -69,7 +85,38 @@ def dashboard(username):
 
         return render_template('dashboard.html', user=user_info, upcoming_movies=upcoming_movies_list)
     else:
+        return "User not found."'''
+
+@app.route('/dashboard/<username>', methods=['GET', 'POST'])
+def dashboard(username):
+    user = User.query.filter_by(username=username).first()
+    if user:
+        user_info = {'username': user.username, 'email': user.email}
+        # Fetch upcoming movies
+        query = text("SELECT Title, Description FROM Movie_Data WHERE Year = 2024 LIMIT 5")
+        result = db.session.execute(query)
+        upcoming_movies = result.fetchall()
+        # Fetch user preferences
+        user_preferences = UserPreferences.query.filter_by(user_id=user.id).first()
+        # Filter movies based on user preferences
+        if user_preferences:
+            preferred_genre = user_preferences.genre
+            preferred_director = user_preferences.director
+            preferred_actor = user_preferences.actor
+            # Query movies with highest ratings (over 7.5) matching user preferences
+            recommended_movies = Movie_Data.query.filter(
+                (Movie_Data.Genre == preferred_genre) |
+                (Movie_Data.Director == preferred_director) |
+                (Movie_Data.Actors.like(f"%{preferred_actor}%"))
+            ).filter(Movie_Data.Rating > 7.5).order_by(Movie_Data.Rating.desc()).limit(10).all()
+        else:
+            # If no user preferences found, recommend top-rated movies
+            recommended_movies = Movie_Data.query.filter(Movie_Data.Rating > 7.5).order_by(
+                Movie_Data.Rating.desc()).limit(10).all()
+        return render_template('dashboard.html', user=user_info, upcoming_movies=upcoming_movies, recommended_movies=recommended_movies)
+    else:
         return "User not found."
+
     
 
 '''@app.route('/search_movies/<username>', methods=['GET', 'POST'])
