@@ -121,13 +121,14 @@
 </head>
 <body>
     <div class="container">
-        <!-- Menu buttons -->
+        
         <div class="menu-buttons">
             <a href="{{ url_for('dashboard', username=session.username) }}" class="menu-button">Dashboard</a>
             <a href="{{ url_for('movies_genre') }}" class="menu-button">Genres</a>
         </div>
 
         <h1>All Movies</h1>
+
 
         <!-- Search form -->
         <form class="search-form" action="/search" method="GET">

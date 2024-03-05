@@ -236,9 +236,9 @@ def movie_rating_review(Rank):
     return render_template('rate_review.html', Rank=Rank)
 
 
-@app.route('/search/<username>', methods=['GET'])
-def search(username):
-    user = User.query.filter_by(username=username).first()
+@app.route('/search', methods=['GET'])
+def search():
+    #user = User.query.filter_by(username=username).first()
     # Get the search query from the request
     query = request.args.get('query', '')
 
@@ -292,7 +292,7 @@ def search(username):
         actors.update(movie.Actors.split(", "))
         actors.update(movie.Actors.split(","))
 
-    return render_template('show_movies.html', user=user,movies=movies, page=page, total_pages=total_pages, genres=genres, actors=actors)
+    return render_template('show_movies.html',movies=movies, page=page, total_pages=total_pages, genres=genres, actors=actors)
 
 
 
