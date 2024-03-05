@@ -70,10 +70,12 @@
 <body>
     <!-- Menu buttons -->
     <div class="menu">
-        <a href="{{ url_for('dashboard', username=session.username) }}" class="menu-button">Dashboard</a>
-        <a href="{{ url_for('index') }}" class="menu-button">Find Movies</a>
-        <a href="{{ url_for('index') }}" class="menu-button">Theatre</a>
-        <a href="{{ url_for('wishlist_page', username=user.username) }}" class="menu-button">Watchlist</a>
+        <div class="menu-buttons">
+            <a href="{{ url_for('dashboard', username=session.username) }}" class="menu-button">Dashboard</a>
+            <a href="{{ url_for('search',username=user.username)}}" class="menu-button">Find Movies</a>
+            <a href="{{ url_for('index') }}" class="menu-button">Theatre</a>
+            <a href="{{ url_for('wishlist_page', username=user.username) }}" class="menu-button">Watchlist</a>
+        </div>
     </div>
 
     <h1>Wishlist for {{ user.username }}</h1>

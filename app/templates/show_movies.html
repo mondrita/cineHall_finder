@@ -20,7 +20,15 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center; /* Align content in the center */
         }
-
+        .menu-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #392f55;
+            color: #fff;
+            text-decoration: none;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
         .movie-list {
             list-style: none;
             padding: 0;
@@ -113,6 +121,12 @@
 </head>
 <body>
     <div class="container">
+        <!-- Menu buttons -->
+        <div class="menu-buttons">
+            <a href="{{ url_for('dashboard', username=session.username) }}" class="menu-button">Dashboard</a>
+            <a href="{{ url_for('movies_genre') }}" class="menu-button">Genres</a>
+        </div>
+
         <h1>All Movies</h1>
 
         <!-- Search form -->

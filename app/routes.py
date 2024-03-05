@@ -109,11 +109,24 @@ def dashboard(username):
                 (Movie_Data.Director == preferred_director) |
                 (Movie_Data.Actors.like(f"%{preferred_actor}%"))
             ).filter(Movie_Data.Rating > 7.5).order_by(Movie_Data.Rating.desc()).limit(10).all()
+            
+            query_trending_movies = text("SELECT * FROM Movie_Data WHERE Metascore >= 75 AND Rating > 7 ORDER BY Metascore DESC, Rating DESC LIMIT 10")
+            result_trending_movies = db.session.execute(query_trending_movies)
+            trending_movies = result_trending_movies.fetchall()
+
+            print("Trending movies:", trending_movies)  # Debugging statement
+            
         else:
             # If no user preferences found, recommend top-rated movies
             recommended_movies = Movie_Data.query.filter(Movie_Data.Rating > 7.5).order_by(
                 Movie_Data.Rating.desc()).limit(10).all()
-        return render_template('dashboard.html', user=user_info, upcoming_movies=upcoming_movies, recommended_movies=recommended_movies)
+            query_trending_movies = text("SELECT * FROM Movie_Data WHERE Metascore >= 75 AND Rating > 7 ORDER BY Metascore DESC, Rating DESC LIMIT 10")
+            result_trending_movies = db.session.execute(query_trending_movies)
+            trending_movies = result_trending_movies.fetchall()
+
+            print("Trending movies:", trending_movies)  # Debugging statement
+            
+        return render_template('dashboard.html', user=user_info, upcoming_movies=upcoming_movies, recommended_movies=recommended_movies,trending_movies=trending_movies)
     else:
         return "User not found."
 
@@ -135,6 +148,7 @@ def search_movies(username):
 
 @app.route('/search_movies/<username>', methods=['GET', 'POST'])
 def search_movies(username):
+    #user = User.query.filter_by(username=username).first()
     if request.method == 'GET':
         query = request.args.get('query')
         if query:
@@ -222,8 +236,9 @@ def movie_rating_review(Rank):
     return render_template('rate_review.html', Rank=Rank)
 
 
-@app.route('/search', methods=['GET'])
-def search():
+@app.route('/search/<username>', methods=['GET'])
+def search(username):
+    user = User.query.filter_by(username=username).first()
     # Get the search query from the request
     query = request.args.get('query', '')
 
@@ -277,4 +292,22 @@ def search():
         actors.update(movie.Actors.split(", "))
         actors.update(movie.Actors.split(","))
 
-    return render_template('show_movies.html', movies=movies, page=page, total_pages=total_pages, genres=genres, actors=actors)
+    return render_template('show_movies.html', user=user,movies=movies, page=page, total_pages=total_pages, genres=genres, actors=actors)
+
+
+
+@app.route('/movies_genre')
+def movies_genre():
+    # Query movies grouped by genre
+    movies_by_genre = {}
+    movies = Movie_Data.query.all()
+    
+    for movie in movies:
+        genres = movie.Genre.split(',')  # Split the genres into a list
+        for genre in genres:
+            genre_movies = movies_by_genre.get(genre, [])  # Get movies list for the current genre
+            if len(genre_movies) < 7:
+                genre_movies.append(movie)  # Append the current movie to the genre's movies list
+                movies_by_genre[genre] = genre_movies  # Update the movies by genre dictionary
+    
+    return render_template('movies_by_genre.html', movies_by_genre=movies_by_genre)

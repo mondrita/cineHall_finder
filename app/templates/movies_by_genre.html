@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies Like Genre</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e1bfdc;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 2000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #704a7c;
+            text-align: center;
+        }
+
+        .genre-section {
+            margin-bottom: 30px;
+        }
+
+        .genre-section h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-gap: 20px;
+        }
+
+        .movie {
+            background-color: #eddeea;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .movie:hover {
+            transform: translateY(-5px);
+        }
+        .menu-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #392f55;
+            color: #fff;
+            text-decoration: none;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+        .movie h3 {
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+
+        .movie p {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+            <!-- Menu buttons -->
+            <div class="menu-buttons">
+                <a href="{{ url_for('dashboard', username=session.username) }}" class="menu-button">Dashboard</a>
+            </div>
+        <h1>FIND THE GENRE THAT'S PERFECT FOR YOU! 🍿</h1>
+        {% for genre, movies in movies_by_genre.items() %}
+            <div class="genre-section">
+                <h2>{{ genre }}</h2>
+                <div class="movie-grid">
+                    {% for movie in movies %}
+                        <div class="movie">
+                            <h3>{{ movie.Title }}</h3>
+                            <p>{{ movie.Description }}</p>
+                            <!-- Add more movie details as needed -->
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

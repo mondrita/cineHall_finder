@@ -10,7 +10,7 @@
             margin-bottom: 20px;
         }
         .dashboard-container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -115,7 +115,7 @@
         <!-- Menu buttons -->
         <div class="menu-buttons">
             <a href="{{ url_for('dashboard', username=session.username) }}" class="menu-button">Dashboard</a>
-            <a href="{{ url_for('search') }}" class="menu-button">Find Movies</a>
+            <a href="{{ url_for('search',username=user.username) }}" class="menu-button">Find Movies</a>
             <a href="{{ url_for('index') }}" class="menu-button">Theatre</a>
             <a href="{{ url_for('wishlist_page', username=user.username) }}" class="menu-button">Watchlist</a>
         </div>
@@ -144,6 +144,19 @@
             <h2>🌟  Recommended Movies 🌟</h2>
             <div class="movie-container">
                 {% for movie in recommended_movies %}
+                    <div class="movie-box">
+                        <p>{{ movie.Title }}</p> <!-- Display movie title -->
+                        <div class="movie-description">{{ movie.Description }}</div> <!-- Movie description -->
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Trending movies -->
+        <div class="trending_movies">
+            <h2>🔥 Top 10 Trending Movies 🔥</h2>
+            <div class="movie-container">
+                {% for movie in trending_movies %}
                     <div class="movie-box">
                         <p>{{ movie.Title }}</p> <!-- Display movie title -->
                         <div class="movie-description">{{ movie.Description }}</div> <!-- Movie description -->
