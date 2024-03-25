@@ -3,6 +3,11 @@
 {% block head %}
     <title>LOG IN</title>
     <style>
+        body {
+            background-image: url('/static/mov.jpg'); /* Set the background image */
+            background-size: cover;
+            background-position: center;
+        }
         .empty-lilac-box {
             display: flex;
             justify-content: center;
@@ -10,11 +15,12 @@
             margin-top: 50px;
         }
         .login-form {
-            background-color: #92568b;
+            background-color: #b794b3;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             width: 300px;
+            margin-right: -500px;
         }
         .login-form label {
             font-weight: bold;
@@ -32,7 +38,7 @@
         .login-form input[type="submit"] {
             width: 100%;
             padding: 10px;
-            background-color:  #800080;
+            background-color:  #7f6a8f;
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -40,7 +46,7 @@
             font-size: 16px;
         }
         .login-form input[type="submit"]:hover {
-            background-color:  #5e125e;
+            background-color:  #431250;
         }
         .login-form a {
             display: block;
@@ -56,13 +62,10 @@
 {% endblock %}
 
 {% block body %}
-<h1>Already a user? Log in Here!</h1><br><br>
+<h1 style="margin-right: -500px;">Already a user? Log in Here!</h1><br><br>
 
     
-        
-        <div class="photo-left">
-            <img src="/static/photo.jpg" alt="photo" class="photo">
-        </div>
+    
         
         <form action="/login" method="post" class="login-form">
             
@@ -73,9 +76,7 @@
             <input type="submit" value="Login">
             <a href="/forgot_password">Forgot password?</a> <!-- Add this line -->
         </form>
-        <div class="photo-right">
-            <img src="/static/photo.jpg" alt="photo" class="photo">
-        </div>
+
     
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}

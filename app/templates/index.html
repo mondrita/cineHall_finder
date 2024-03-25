@@ -6,7 +6,7 @@
     /* CSS for positioning the heading */
     .heading-container {
         text-align: center;
-        margin-top: -7cm; /* Adjust this value as needed */
+        margin-top: -3cm; /* Adjust this value as needed */
         margin-bottom: 20px;
     }
 
@@ -26,15 +26,15 @@
     /* CSS for glowing effect */
     .glow {
         animation: glow 2s ease-in-out infinite alternate;
-        color: #884EA0; /* Change text color to #884EA0 */
+        color: #31163d; /* Change text color to #884EA0 */
     }
 
     @keyframes glow {
         from {
-            text-shadow: 0 0 10px #F5EEF8, 0 0 20px #F5EEF8, 0 0 30px #F5EEF8, 0 0 40px #F5EEF8, 0 0 50px #F5EEF8, 0 0 60px #F5EEF8, 0 0 70px #F5EEF8;
+            text-shadow: 0 0 10px #989599, 0 0 20px #989599, 0 0 30px#989599, 0 0 40px #989599, 0 0 50px #989599, 0 0 60px #989599, 0 0 70px #989599;
         }
         to {
-            text-shadow: 0 0 20px #F5EEF8, 0 0 30px #F5EEF8, 0 0 40px #F5EEF8, 0 0 50px #F5EEF8, 0 0 60px #F5EEF8, 0 0 70px #F5EEF8, 0 0 80px #F5EEF8;
+            text-shadow: 0 0 20px #cecccf, 0 0 30px  #cecccf, 0 0 40px #cecccf, 0 0 50px  #cecccf, 0 0 60px #cecccf, 0 0 70px #cecccf, 0 0 80px  #cecccf;
         }
     }
 
@@ -49,12 +49,23 @@
         font-size: 20px; /* Adjust font size as needed */
         padding: 10px 20px; /* Adjust padding as needed */
     }
+
+    @font-face {
+        font-family: myFont;
+        src: url('/static/poster.ttf');
+    }
+
+    .poster {
+        font-family: myFont;
+        font-size: 55px;
+    }
 </style>
 {% endblock %}
 
 {% block body %}
 <div class="heading-container">
-    <h1 class="glow">WELCOME to CINEHALL FINDER!</h1><br><br><br><br><br><br>
+    <h1 class="glow poster">WELCOME to</h1>
+    <h1 class="glow poster">CINEHALL FINDER!</h1><br><br><br><br>
 </div>
 <div class="btn-container">
     <a href="/signup" class="btn">Sign Up Here!</a>

@@ -6,7 +6,7 @@
     <title>{% block head %}{%endblock%}</title>
     <style>
         body {
-            background-color: #e6e6fa; /* Lilac color */
+            background-color: #7f6a8f; /*#e6e6fa; /* Lilac color */
             margin: 0;
             padding: 0;
             display: flex;
@@ -14,12 +14,21 @@
             align-items: center;
             height: 100vh;
             text-align: center;
-            font-family:sans-serif;
+            font-family:Font1, sans-serif;
             flex-direction: column; /* Stack items vertically */
+        }
+        @font-face {
+        font-family: Font1;
+        src: url('/static/Athena.ttf');
+        }
+
+        .poster1 {
+            font-family: Font1;
+            font-size: 45px;
         }
 
         h1 {
-            color: #800080; /* Dark purple */
+            color: #271141; /* Dark purple */
             margin-bottom: 20px;
         }
 
@@ -30,7 +39,7 @@
         .btn {
             display: inline-block;
             padding: 10px 20px;
-            background-color: #4b0082; /* Dark purple */
+            background-color: #3b2848; /* Dark purple */
             color: #fff; /* White */
             text-decoration: none;
             border-radius: 5px;
@@ -39,7 +48,7 @@
         }
 
         .btn:hover {
-            background-color: #800080; /* Darken on hover */
+            background-color: #743497; /* Darken on hover */
         }
 
         .photo-container {
