@@ -58,14 +58,14 @@ class hall(db.Model):
     Movie_Title = db.Column(db.Text, primary_key=True)
     Theater = db.Column(db.Text)
     Location = db.Column(db.Text)
-    Start_Date = db.Column(db.Text)
-    End_Date = db.Column(db.Text)
     Movie_time = db.Column(db.Text)
     Total_Seats = db.Column(db.Integer)
     Seats_Available = db.Column(db.Integer)
     Ticket_Price = db.Column(db.Integer)
     three_D = db.Column(db.Text)
     duration = db.Column(db.Text)
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
 
     def __repr__(self):
         return f"<hall(Movie_Title='{self.Movie_Title}', Location='{self.Location}', Start_Date='{self.Start_Date}')>"

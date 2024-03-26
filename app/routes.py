@@ -366,16 +366,11 @@ from datetime import datetime
 
 @app.route('/current_movies/<username>')
 def current_movies(username):
-    # Get the current date in the format month/day/year
-    #current_date_str = datetime.now().strftime('%m/%d/%Y')
+    # Get the current date
     current_date = datetime.now().date()
-    current_date_str = current_date.strftime('%m/%d/%Y')
-    # Query the hall table to get all currently showing movies
-    '''current_movies = hall.query.filter(
-        hall.Start_Date <= current_date_str,
-        hall.End_Date >= current_date_str
-    ).all()'''
-    current_movies = hall.query.all()
-    # Pass the retrieved data to the template for rendering
-    #print(current_movies)
+
+    # Query the database to get all movies that are currently showing
+    current_movies = hall.query.filter(hall.start_date <= current_date, hall.end_date >= current_date).all()
+
+    # Pass the current movies to the template for rendering
     return render_template('current_movies.html', username=username, current_movies=current_movies)
