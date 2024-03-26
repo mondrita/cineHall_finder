@@ -1,7 +1,7 @@
 <!-- dashboard.html -->
-{% extends 'base.html' %}
+{% extends 'base1.html' %}
 
-{% block head %}
+{% block content %}
     <title>User Dashboard</title>
     <style>
         /* CSS for styling the dashboard */
@@ -10,7 +10,7 @@
             margin-bottom: 20px;
         }
         .dashboard-container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -53,6 +53,7 @@
             display: inline-block;
             cursor: pointer;
             position: relative;
+            width: 200px; /* Set fixed width for movie box */
         }
 
         .movie-description {
@@ -102,22 +103,15 @@
         .search-container button:hover {
             background-color: #5b506b;
         }
-    </style>
-{% endblock %}
 
-{% block body %}
+
+
+    </style>
+
     <div class="dashboard-container">
         <!-- Welcome message -->
         <div class="welcome-message">
             <h2>Welcome, {{ user.username }}! 🎥🍿📽️</h2>
-        </div>
-
-        <!-- Menu buttons -->
-        <div class="menu-buttons">
-            <a href="{{ url_for('dashboard', username=session.username) }}" class="menu-button">Dashboard</a>
-            <a href="{{ url_for('search',username=user.username) }}" class="menu-button">Find Movies</a>
-            <a href="{{ url_for('index') }}" class="menu-button">Theatre</a>
-            <a href="{{ url_for('wishlist_page', username=user.username) }}" class="menu-button">Watchlist</a>
         </div>
 
         <!-- User info -->
@@ -129,8 +123,9 @@
 
         <!-- Upcoming movies -->
         <div class="upcoming_movies">
-            <h2>🎬  Upcoming Movies (2024) 🎬</h2>
+            <h2>🎬 Upcoming Movies (2024) 🎬</h2>
             <div class="movie-container">
+                <!-- Display upcoming movies -->
                 {% for movie in upcoming_movies %}
                     <div class="movie-box">
                         <p>{{ movie[0] }}</p> <!-- Display movie title -->
@@ -139,10 +134,12 @@
                 {% endfor %}
             </div>
         </div>
+
         <!-- Recommended movies -->
         <div class="recommended_movies">
-            <h2>🌟  Recommended Movies 🌟</h2>
+            <h2>🌟 Recommended Movies 🌟</h2>
             <div class="movie-container">
+                <!-- Display recommended movies -->
                 {% for movie in recommended_movies %}
                     <div class="movie-box">
                         <p>{{ movie.Title }}</p> <!-- Display movie title -->
@@ -156,6 +153,7 @@
         <div class="trending_movies">
             <h2>🔥 Top 10 Trending Movies 🔥</h2>
             <div class="movie-container">
+                <!-- Display trending movies -->
                 {% for movie in trending_movies %}
                     <div class="movie-box">
                         <p>{{ movie.Title }}</p> <!-- Display movie title -->
@@ -164,6 +162,7 @@
                 {% endfor %}
             </div>
         </div>
+
         <!-- Add a search form with heading -->
         <div class="search-container">
             <h2>Search Movies to Add to Watchlist 📺</h2>
@@ -172,6 +171,6 @@
                 <button type="submit">Search</button>
             </form>
         </div>
-
     </div>
+
 {% endblock %}

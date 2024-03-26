@@ -1,8 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends 'base1.html' %}
+
+{% block content %}
     <title>{{ movie.Title }} - Movie Details</title>
     <style>
         body {
@@ -84,8 +82,27 @@
 
             
             </li>
-            <a href="/movie/{{ movie.Rank }}/rate_review" class="rating-review-btn">Rate and Review this Movie</a>
+            <form action="{{ url_for('add_to_wishlist') }}" method="POST">
+                <input type="hidden" name="Rank" value="{{ movie.Rank }}">
+                <input type="hidden" name="user_id" value="{{ user_id }}">
+                <button type="submit" class="rating-review-btn">Add to Wishlist</button>
+            </form>
+            <a href="/movie/{{ movie.Rank }}/rate_review?username={{ username }}" class="rating-review-btn">Rate and Review this Product</a>
+
         </ul>
+        <div class="ratings-reviews">
+            <h2>Ratings and Reviews</h2>
+            {% if ratings_reviews %}
+                {% for rating_review in ratings_reviews %}
+                    <div class="rating-review">
+                        <p><strong>Rating:</strong> {{ rating_review.rating }}</p>
+                        <p><strong>Review:</strong> {{ rating_review.review }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No ratings and reviews yet.</p>
+            {% endif %}
+        </div>
     </div>
 </body>
-</html>
+{% endblock %}

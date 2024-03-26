@@ -40,3 +40,14 @@ class UserPreferences(db.Model):
     year = db.Column(db.Integer)  # Year preference
     def __repr__(self):
         return f"<UserPreferences(user_name={self.user_name}, genre='{self.genre}', director='{self.director}', actor='{self.actor}', year={self.year})>"
+
+class RatingReview(db.Model):
+    __tablename__ = 'rating_review'
+    id = db.Column(db.Integer, primary_key=True)
+    movie_rank = db.Column(db.Integer, db.ForeignKey('Movie_Data.Rank'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) 
+    rating = db.Column(db.Integer, nullable=False)
+    review = db.Column(db.Text, nullable=True)
+
+    #def __repr__(self):
+       # return f"<RatingReview(id='{self.id}', item_id='{self.item_id}', rating='{self.rating}', review='{self.review}')>"

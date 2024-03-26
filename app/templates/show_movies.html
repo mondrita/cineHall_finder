@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends 'base1.html' %}
+
+{% block content %}
     <title>All Movies</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #C8A2C8;
-        }
 
         .container {
             max-width: 800px;
@@ -22,7 +15,7 @@
         }
         .menu-button {
             display: inline-block;
-            padding: 10px 20px;
+            padding: 10px 20px;rgba(29, 28, 28, 0.1)
             background-color: #392f55;
             color: #fff;
             text-decoration: none;
@@ -115,29 +108,25 @@
         }
 
         .view-details-btn:hover {
-            background-color: ##622A77;
+            background-color: #622A77;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        
-        <div class="menu-buttons">
-            <a href="{{ url_for('dashboard', username=session.username) }}" class="menu-button">Dashboard</a>
-            <a href="{{ url_for('movies_genre') }}" class="menu-button">Genres</a>
-        </div>
+
 
         <h1>All Movies</h1>
 
 
         <!-- Search form -->
-        <form class="search-form" action="/search" method="GET">
-            <input class="search-input" type="text" name="query" placeholder="Search Movies...">
+        <form class="search-form" action="{{ url_for('search', username=username) }}" method="GET">
+            <input class="search-input" type="text" name="query" placeholder="Search Movies...🔎">
             <button class="search-button" type="submit">Search</button>
         </form>
 
          <!-- Search form with filters -->
-         <form class="search-form" action="/search" method="GET">
+         <form class="search-form" action="{{ url_for('search', username=username) }}" method="GET">
             <!-- <input class="search-input" type="text" name="query" placeholder="Search products..."> -->
             <select class="filter-input" name="Genre" id="Genre">
                 <option value="">Select Genre</option>
@@ -163,8 +152,9 @@
                     <!-- Display movie title -->
                     <span class="movie-title">{{ movie.Title }}</span><br>
                     
-                    <a href="/movie/{{ movie.Rank }}" class="view-details-btn">View Details</a>
-                    
+
+                    <a href="{{ url_for('movie_page',Rank=movie.Rank, username=username) }}" class="view-details-btn">View Movie</a>
+
                 </li>
             {% endfor %}
         </ul>
@@ -182,4 +172,5 @@
         </div>
     </div>
 </body>
-</html>
+{% endblock %}
+
