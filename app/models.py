@@ -66,6 +66,7 @@ class hall(db.Model):
     duration = db.Column(db.Text)
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
+    pic = db.Column(db.Text)
 
     def __repr__(self):
         return f"<hall(Movie_Title='{self.Movie_Title}', Location='{self.Location}', Start_Date='{self.Start_Date}')>"
