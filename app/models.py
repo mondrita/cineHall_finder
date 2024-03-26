@@ -51,3 +51,21 @@ class RatingReview(db.Model):
 
     #def __repr__(self):
        # return f"<RatingReview(id='{self.id}', item_id='{self.item_id}', rating='{self.rating}', review='{self.review}')>"
+    
+
+class hall(db.Model):
+    __tablename__ = 'hall'
+    Movie_Title = db.Column(db.Text, primary_key=True)
+    Theater = db.Column(db.Text)
+    Location = db.Column(db.Text)
+    Start_Date = db.Column(db.Text)
+    End_Date = db.Column(db.Text)
+    Movie_time = db.Column(db.Text)
+    Total_Seats = db.Column(db.Integer)
+    Seats_Available = db.Column(db.Integer)
+    Ticket_Price = db.Column(db.Integer)
+    three_D = db.Column(db.Text)
+    duration = db.Column(db.Text)
+
+    def __repr__(self):
+        return f"<hall(Movie_Title='{self.Movie_Title}', Location='{self.Location}', Start_Date='{self.Start_Date}')>"

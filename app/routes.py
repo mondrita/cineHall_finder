@@ -1,6 +1,6 @@
 from app import app, db
 from flask import render_template, request, redirect, url_for,flash,session,jsonify
-from app.models import User, Movie_Data, Wishlist, UserPreferences, RatingReview
+from app.models import User, Movie_Data, Wishlist, UserPreferences, RatingReview, hall
 from sqlalchemy.sql import text,or_,func
 from math import ceil 
 
@@ -361,3 +361,21 @@ def remove_from_wishlist(Rank):
             flash('Please log in to remove items from your wishlist.', 'error')
 
         return redirect(url_for('wishlist_page',username=username))
+
+from datetime import datetime
+
+@app.route('/current_movies/<username>')
+def current_movies(username):
+    # Get the current date in the format month/day/year
+    #current_date_str = datetime.now().strftime('%m/%d/%Y')
+    current_date = datetime.now().date()
+    current_date_str = current_date.strftime('%m/%d/%Y')
+    # Query the hall table to get all currently showing movies
+    '''current_movies = hall.query.filter(
+        hall.Start_Date <= current_date_str,
+        hall.End_Date >= current_date_str
+    ).all()'''
+    current_movies = hall.query.all()
+    # Pass the retrieved data to the template for rendering
+    #print(current_movies)
+    return render_template('current_movies.html', username=username, current_movies=current_movies)

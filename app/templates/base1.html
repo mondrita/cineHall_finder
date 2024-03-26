@@ -127,7 +127,7 @@
                 <div class="dropdown-content">
                     <a href="{{ url_for('movies_genre') }}" >GENRES</a>
                 </div>
-                <a href="#" class="all-products-button">THEATRE</a>
+                <a href="{{url_for('current_movies', username=username)}}" class="all-products-button">THEATRE</a>
             </div>
         </div>
 
