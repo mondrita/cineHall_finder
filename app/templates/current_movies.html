@@ -10,7 +10,7 @@
         }
 
         .movie-box {
-            border: 1px solid #000;
+            border: 1px solid #b4a0c3;
             padding: 10px;
             margin: 5px;
             width: 200px; /* Adjust as needed */
@@ -19,6 +19,7 @@
             display: inline-block;
             background-color: #b4a0c3;
             color: white;
+            border-radius: 15px
         }
 
         .movie-image {
@@ -54,7 +55,7 @@
             text-decoration: none;
             border-radius: 5px;
             transition: background-color 0.3s ease;
-            margin-top: 80px; /* Add space above button */
+            margin-top: 10px; /* Add space above button */
         }
 
         .buy-ticket-button:hover {
@@ -66,10 +67,9 @@
     <div class="movie-container">
         {% for movie in current_movies %}
             <div class="movie-box">
-                {{ movie.Movie_Title }}
-                <a href="{{ url_for('buy_tickets', username=username, movie_title=movie.Movie_Title) }}" class="buy-ticket-button">Buy Ticket</a>
                 <img src="{{movie.pic}}" alt="{{ movie.Movie_Title }}" class="movie-image">
                 <div>{{ movie.Movie_Title }}</div>
+                <a href="{{ url_for('buy_tickets', username=username, movie_title=movie.Movie_Title) }}" class="buy-ticket-button">Buy Ticket</a>
             </div>
         {% endfor %}
     </div>
