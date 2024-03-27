@@ -368,9 +368,10 @@ from datetime import datetime
 def current_movies(username):
     # Get the current date
     current_date = datetime.now().date()
+    current_date_str = current_date.strftime('%m/%d/%Y')
 
     # Query the database to get all movies that are currently showing
-    current_movies = hall.query.filter(hall.start_date <= current_date, hall.end_date >= current_date).all()
+    current_movies = hall.query.all()
 
     # Pass the current movies to the template for rendering
     return render_template('current_movies.html', username=username, current_movies=current_movies)
