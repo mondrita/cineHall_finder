@@ -17,6 +17,7 @@
         {% for movie in current_movies %}
             <div class="movie-box">
                 {{ movie.Movie_Title }}
+                <a href="{{ url_for('buy_tickets', username=username, movie_title=movie.Movie_Title) }}" class="buy-ticket-button">Buy Ticket</a>
             </div>
         {% endfor %}
     </div>

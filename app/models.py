@@ -1,4 +1,4 @@
-from app import db
+from app import app,db
 class Movie_Data(db.Model):
     __tablename__ = 'Movie_Data'
     Rank = db.Column(db.Integer, primary_key=True)
@@ -66,6 +66,70 @@ class hall(db.Model):
     duration = db.Column(db.Text)
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
+    pic = db.Column(db.Text)
 
     def __repr__(self):
         return f"<hall(Movie_Title='{self.Movie_Title}', Location='{self.Location}', Start_Date='{self.Start_Date}')>"
+    
+
+class Seat(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    movie_title = db.Column(db.Integer, db.ForeignKey('hall.Movie_Title'), nullable=False)
+    seat_number = db.Column(db.String(10), nullable=False)
+    status = db.Column(db.String(10), nullable=False, default='available')  # 'available' or 'taken'
+
+    def __repr__(self):
+        return f"<Seat(movie_id={self.movie_id}, seat_number='{self.seat_number}', status='{self.status}')>"
+
+
+
+def populate_seats(movie_title, total_seats):
+    # Retrieve the movie from the database
+    movie = hall.query.filter_by(Movie_Title=movie_title).first()
+
+    # Check if the movie exists
+    if movie:
+        # Check if seats already exist for the movie
+        existing_seats = Seat.query.filter_by(movie_title=movie_title).count()
+        if existing_seats == 0:
+            # Generate and add seats for the movie
+            for seat_number in range(1, total_seats + 1):
+                seat = Seat(movie_title=movie_title, seat_number=str(seat_number))
+                db.session.add(seat)
+            
+            # Commit the changes to the database
+            db.session.commit()
+            print(f"Seats added for movie: '{movie_title}'")
+        else:
+            print(f"Seats already exist for movie: '{movie_title}'")
+    else:
+        print(f"Movie '{movie_title}' not found in the database.")
+
+movies = {
+    "Avengers: Endgame": 20,
+    "Spider-Man: Far From Home": 20,
+    "The Lion King": 20,
+    "Joker": 20,
+    "Frozen II": 20,
+    "Fast & Furious 9": 20,
+    "The Matrix Resurrections": 20,
+    "Black Widow": 20,
+    "Wonder Woman 1984": 20,
+    "No Time to Die": 20,
+    "Tenet": 20,
+    "The Suicide Squad": 20,
+    "Godzilla vs. Kong": 20,
+    "Dune": 20,
+    "Shang-Chi and the Legend of the Ten Rings": 20,
+    "Black Panther": 20,
+    "The Dark Knight": 20,
+    "Inception": 20,
+    "Interstellar": 20,
+    "Titanic": 20
+}
+
+
+
+with app.app_context():
+    for movie_title, total_seats in movies.items():
+        populate_seats(movie_title, total_seats)

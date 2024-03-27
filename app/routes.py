@@ -1,6 +1,6 @@
 from app import app, db
 from flask import render_template, request, redirect, url_for,flash,session,jsonify
-from app.models import User, Movie_Data, Wishlist, UserPreferences, RatingReview, hall
+from app.models import User, Movie_Data, Wishlist, UserPreferences, RatingReview, hall, Seat
 from sqlalchemy.sql import text,or_,func
 from math import ceil 
 
@@ -374,3 +374,29 @@ def current_movies(username):
 
     # Pass the current movies to the template for rendering
     return render_template('current_movies.html', username=username, current_movies=current_movies)
+
+from flask import request
+
+@app.route('/buy_tickets/<movie_title>/<username>', methods=['GET', 'POST'])
+def buy_tickets(movie_title, username):
+    movie = hall.query.filter_by(Movie_Title=movie_title).first()
+    # Fetch all seats for the movie, not just available ones
+    all_seats = Seat.query.filter_by(movie_title=movie_title).all()
+    if request.method == 'POST':
+        # Logic to handle the ticket purchase
+        selected_seat = request.form.get('selected_seat')
+        if selected_seat:
+            # Split the selected_seat string into individual seat numbers
+            selected_seat_numbers = selected_seat.split(',')
+            for seat_number in selected_seat_numbers:
+                # Update the availability of the selected seat
+                seat = Seat.query.filter_by(movie_title=movie_title, seat_number=seat_number).first()
+                if seat:
+                    seat.status = 'unavailable'
+                else:
+                    # Seat not found, handle gracefully (perhaps log or display a message)
+                    print(f"Seat {seat_number} not found for movie {movie_title}")
+            db.session.commit()
+            # Redirect or render a confirmation page
+    # Pass all seats to the template, including unavailable ones
+    return render_template('buy_ticket.html', movie=movie, username=username, all_seats=all_seats)
