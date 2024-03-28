@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Navbar Website</title>
+    <title>CINEPLEX</title>
     <style>
         @font-face {
         font-family: Font1;
@@ -119,15 +119,15 @@
 </head>
 <body>
     <div class="navbar">
-
         <div class="icons">
-
             <div class="dropdown">
-                <a href="{{ url_for('search',username=username) }}" class="all-products-button">FIND MOVIES</a>
+                <a href="{{ url_for('search', username=username) }}" class="all-products-button">FIND MOVIES</a>
                 <div class="dropdown-content">
                     <a href="{{ url_for('movies_genre') }}" >GENRES</a>
                 </div>
-                <a href="{{url_for('current_movies', username=username)}}" class="all-products-button">THEATRE</a>
+                <a href="{{ url_for('current_movies', username=username) }}" class="all-products-button">THEATRE</a>
+                <a href="{{ url_for('find_theatre', username=username) }}" class="all-products-button">FIND THEATRE</a>
+<! -- ABOVE LINE NEEDS CHANGING -->
             </div>
         </div>
 
