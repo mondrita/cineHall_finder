@@ -121,6 +121,12 @@
             <p><strong>Email:</strong> {{ user.email }}</p>
         </div>
 
+        <div class="add-friend">
+            <h2>Friends</h2>
+            <a href="{{ url_for('add_friend') }}" class="menu-button">Add Friend</a>
+            <a href="{{ url_for('view_friends') }}" class="menu-button">View Friend</a>
+        </div>
+
         <!-- Upcoming movies -->
         <div class="upcoming_movies">
             <h2>🎬 Upcoming Movies (2024) 🎬</h2>
