@@ -1,4 +1,5 @@
 from app import app,db
+from sqlalchemy.orm import relationship
 class Movie_Data(db.Model):
     __tablename__ = 'Movie_Data'
     Rank = db.Column(db.Integer, primary_key=True)
@@ -15,14 +16,32 @@ class Movie_Data(db.Model):
     Metascore = db.Column(db.Integer)
     def __repr__(self):
         return f"<MovieData(title='{self.Title}', year='{self.Year}')>"
+
+class Friendship(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    friend_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
     security_answer = db.Column(db.String(255), nullable=False)
+
+    friends = relationship(
+        'User',
+        secondary='friendship',
+        primaryjoin=id == Friendship.user_id,
+        secondaryjoin=id == Friendship.friend_id,
+        backref='friend_of'
+    )
+
     def __repr__(self):
         return '<User %r>' % self.username
+
+
+
 class Wishlist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     movie_rank = db.Column(db.Integer, db.ForeignKey('Movie_Data.Rank'), nullable=False)
