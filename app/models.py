@@ -1,4 +1,4 @@
-from app import db
+from app import app,db
 from sqlalchemy.orm import relationship
 class Movie_Data(db.Model):
     __tablename__ = 'Movie_Data'

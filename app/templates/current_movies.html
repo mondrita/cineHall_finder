@@ -2,13 +2,64 @@
 
 {% block content %}
     <style>
+        .movie-container {
+            overflow-x: hidden;
+            white-space: nowrap;
+            position: relative;
+            text-align: center;
+        }
+
         .movie-box {
-            border: 1px solid #000;
+            border: 1px solid #b4a0c3;
             padding: 10px;
             margin: 5px;
             width: 200px; /* Adjust as needed */
+            height: 350px;
             text-align: center;
             display: inline-block;
+            background-color: #b4a0c3;
+            color: white;
+            border-radius: 15px
+        }
+
+        .movie-image {
+            max-width: 100%;
+            max-height: 80%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .arrow {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(350%);
+            font-size: 30px; /* Increase the font size for larger arrows */
+        }
+
+        #rightArrow {
+            right: 5px;
+            transform: translateY(600%);
+        }
+
+        #leftArrow {
+            left: 5px;
+            display: none; /* Initially hidden */
+            transform: translateY(600%) rotateY(180deg); /* Flip arrow horizontally */
+        }
+        .buy-ticket-button {
+            display: inline-block;
+            padding: 5px 5px;
+            background-color: #825f8f;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin-top: 10px; /* Add space above button */
+        }
+
+        .buy-ticket-button:hover {
+            background-color: #49195b;
         }
     </style>
     
@@ -16,8 +67,46 @@
     <div class="movie-container">
         {% for movie in current_movies %}
             <div class="movie-box">
-                {{ movie.Movie_Title }}
+                <img src="{{movie.pic}}" alt="{{ movie.Movie_Title }}" class="movie-image">
+                <div>{{ movie.Movie_Title }}</div>
+                <a href="{{ url_for('buy_tickets', username=username, movie_title=movie.Movie_Title) }}" class="buy-ticket-button">Buy Ticket</a>
             </div>
         {% endfor %}
     </div>
+    <div class="arrow" id="leftArrow">&#10132;</div> <!-- Left arrow -->
+    <div class="arrow" id="rightArrow">&#10132;</div> <!-- Right arrow -->
+
+    <script>
+        const movieContainer = document.querySelector('.movie-container');
+        const rightArrow = document.getElementById('rightArrow');
+        const leftArrow = document.getElementById('leftArrow');
+        const scrollDistance = 500; // Adjust the scroll distance
+
+        const scrollMoviesRight = () => {
+            movieContainer.scrollBy({
+                left: scrollDistance, // Adjust as needed
+                behavior: 'smooth' // Use smooth scrolling
+            });
+            leftArrow.style.display = 'block'; // Show left arrow once scrolled right
+        };
+
+        const scrollMoviesLeft = () => {
+            movieContainer.scrollBy({
+                left: -scrollDistance, // Adjust as needed
+                behavior: 'smooth' // Use smooth scrolling
+            });
+        };
+
+        rightArrow.addEventListener('click', scrollMoviesRight);
+        leftArrow.addEventListener('click', scrollMoviesLeft);
+
+        // Hide left arrow initially and show only after scrolling to the right
+        movieContainer.addEventListener('scroll', () => {
+            if (movieContainer.scrollLeft > 0) {
+                leftArrow.style.display = 'block';
+            } else {
+                leftArrow.style.display = 'none';
+            }
+        });
+    </script>
 {% endblock %}

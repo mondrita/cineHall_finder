@@ -1,0 +1,160 @@
+{% extends "base1.html" %}
+
+{% block content %}
+    <style>
+        .container {
+            text-align: center;
+            margin: 20px auto;
+            background-color:  #c3afd4 ;
+            max-width: 700px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .movie-info {
+            margin-bottom: 20px;
+        }
+        .time-options {
+            margin-bottom: 20px;
+        }
+        .date-options {
+            margin-bottom: 20px;
+        }
+        .seat-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px; /* Adjust spacing between rows */
+        }
+        .seat {
+            width: 40px; /* Adjust width for smaller seats */
+            height: 40px; /* Adjust height for smaller seats */
+            margin: 5px;
+            text-align: center;
+            line-height: 40px;
+            border: 1px solid #000;
+            cursor: pointer;
+            border-radius: 10px; /* Add border-radius for rounded corners */
+        }
+        .available {
+            background-color: rgb(202, 225, 202); /* Adjust background color for available seats */
+        }
+        .unavailable {
+            background-color: rgb(253, 193, 186); /* Adjust background color for unavailable seats */
+            cursor: not-allowed;
+        }
+        .selected {
+            background-color: rgb(167, 199, 231); /* Adjust background color for selected seats */
+        }
+        /* Styling for selection boxes */
+        input[type="date"], select, input[type="submit"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            width: 100%;
+            max-width: 300px;
+            box-sizing: border-box; /* Ensure padding and border are included in width */
+        }
+        /* Styling for choice buttons/circles */
+        .format-options label {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .format-options input[type="radio"] {
+            display: none; /* Hide the actual radio buttons */
+        }
+        .format-options label {
+            border: 2px solid #ccc;
+            border-radius: 50%; /* Make it a circle */
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            cursor: pointer;
+        }
+        .format-options input[type="radio"]:checked + label {
+            background-color: rgb(167, 199, 231); /* Change background color when selected */
+            color: #fff;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #a28ba9; /* Default button color */
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+        }
+        input[type="submit"]:hover {
+            background-color: #6f608d; /* Change button color on hover */
+        }
+    </style>
+
+    <div class="container">
+        <h1>{{ movie.Movie_Title }}</h1>
+        <div class="movie-info">
+            <p>Duration: {{ movie.duration }}</p>
+            <p>Ticket Price: ${{ movie.Ticket_Price }}</p>
+            {% if movie.three_D == 'yes' %}
+            <div class="format-options">
+                <p>Please choose format (3D will cost 100tk extra):</p>
+                <input type="radio" id="2D" name="format" value="2D" checked>
+                <label for="2D">2D</label>
+                <input type="radio" id="3D" name="format" value="3D">
+                <label for="3D">3D</label>
+            </div>
+            {% else %}
+            <p>2D Only</p>
+            {% endif %}
+        </div>
+        <div class="time-options">
+            <p>Please choose a time:</p>
+            <select name="time">
+                <option value="morning">Morning (10:00 AM)</option>
+                <option value="afternoon">Afternoon (2:00 PM)</option>
+                <option value="night">Night (8:00 PM)</option>
+            </select>
+        </div>
+        <div class="date-options">
+            <p>Please choose a date:</p>
+            <input type="date" name="date" min="{{ movie.start_date }}" max="{{ movie.end_date }}">
+        </div>
+        <form action="{{ url_for('buy_tickets', movie_title=movie.Movie_Title, username=username) }}" method="post">
+            <p>Please select your seat:</p>
+            {% for i in range(0, all_seats|length, 4) %}
+                <div class="seat-container">
+                    {% for seat in all_seats[i:i+4] %}
+                        <div class="seat {% if seat.status == 'available' %}available{% else %}unavailable{% endif %}" data-seat-number="{{ seat.seat_number }}" onclick="toggleSelection(this)">
+                            {{ seat.seat_number }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <input type="hidden" name="selected_seat" id="selected_seat" value="">
+            <input type="submit" value="Buy">
+        </form>
+    </div>
+
+    <script>
+        function toggleSelection(seatElement) {
+            console.log("Seat clicked:", seatElement);
+            if (!seatElement.classList.contains('unavailable')) {
+                console.log("Seat is available");
+                seatElement.classList.toggle('selected');
+                updateSelectedSeat();
+            } else {
+                console.log("Seat is unavailable");
+            }
+        }
+    
+        function updateSelectedSeat() {
+            var selectedSeats = document.querySelectorAll('.selected');
+            var selectedSeatNumbers = [];
+            selectedSeats.forEach(function(seat) {
+                selectedSeatNumbers.push(seat.getAttribute('data-seat-number'));
+            });
+            document.getElementById('selected_seat').value = selectedSeatNumbers.join(',');
+            console.log("Selected seats:", selectedSeatNumbers);
+        }
+    </script>
+{% endblock %}

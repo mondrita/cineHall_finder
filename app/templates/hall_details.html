@@ -1,0 +1,74 @@
+{% extends "base1.html" %}
+
+{% block content %}
+<style>
+    .details-container {
+        background-color: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px auto; /* Center the container */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 60%; /* Less wide */
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center content vertically */
+    }
+
+    .detail-item {
+        margin-bottom: 15px; /* Increase spacing */
+        width: 100%; /* Ensure full width for alignment */
+    }
+
+    .detail-item h2 {
+        text-align: left; /* Center the hall name */
+        margin: 0; /* Remove default margin to avoid extra space */
+        white-space: nowrap; /* Ensure it stays in a single line */
+    }
+
+    .detail-item p {
+        text-align: left; /* Align paragraph texts to the left */
+        width: 100%; /* Full width for proper alignment */
+    }
+
+    .button-container {
+        width: 100%; /* Take full width */
+        display: flex;
+        justify-content: center; /* Center button horizontally */
+        margin-top: 20px; /* Space from the details container */
+    }
+
+    .theatre-button {
+        padding: 10px 15px;
+        background-color: #997eb7;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .theatre-button:hover {
+        background-color: #552f64;
+    }
+</style>
+
+<div class="details-container">
+    <div class="detail-item">
+        <h2>{{ hall.hall_name }}</h2>
+    </div>
+    <div class="detail-item">
+        <p>Location: {{ hall.location }}</p>
+    </div>
+    <div class="detail-item">
+        <p>Food Court Items: {{ hall.food_court_items }}</p>
+    </div>
+    <div class="detail-item">
+        <p>Parking: {{ hall.parking_lot_capacity }}</p>
+    </div>
+</div>
+<div class="button-container">
+    <a href="{{ hall.direction }}" target="_blank" class="theatre-button">View Directions</a>
+</div>
+
+{% endblock %}
