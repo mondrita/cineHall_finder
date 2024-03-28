@@ -133,3 +133,16 @@ movies = {
 with app.app_context():
     for movie_title, total_seats in movies.items():
         populate_seats(movie_title, total_seats)
+
+
+class Hall_Details(db.Model):
+    __tablename__ = 'hall_details'
+    hall_id = db.Column(db.Integer, primary_key=True)
+    hall_name = db.Column(db.String(255), nullable=False)
+    location = db.Column(db.String(255), nullable=False)
+    direction = db.Column(db.Text, nullable=False)
+    parking_lot_capacity = db.Column(db.Integer)
+    food_court_items = db.Column(db.Text)
+
+    def __repr__(self):
+        return f"<hall_details(Hall_Name='{self.hall_name}', Location='{self.location}', Direction='{self.direction}', Parking_Lot_Capacity='{self.parking_lot_capacity}', Food_Court_Items='{self.food_court_items}')>"

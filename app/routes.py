@@ -1,6 +1,6 @@
 from app import app, db
 from flask import render_template, request, redirect, url_for,flash,session,jsonify
-from app.models import User, Movie_Data, Wishlist, UserPreferences, RatingReview, hall, Seat
+from app.models import Hall_Details, User, Movie_Data, Wishlist, UserPreferences, RatingReview, hall, Seat
 from sqlalchemy.sql import text,or_,func
 from math import ceil 
 
@@ -401,3 +401,16 @@ def buy_tickets(movie_title, username):
             # Redirect or render a confirmation page
     # Pass all seats to the template, including unavailable ones
     return render_template('buy_ticket.html', movie=movie, username=username, all_seats=all_seats)
+
+@app.route('/find_theatre')
+def find_theatre():
+    # Fetch all hall details from the database
+    halls = Hall_Details.query.all()
+
+    # Pass the list of hall details to the find_theatre template
+    return render_template('find_theatre.html', halls=halls)
+
+@app.route('/hall_details/<hall_name>')
+def hall_details(hall_name):
+    hall = Hall_Details.query.filter_by(hall_name=hall_name).first_or_404()
+    return render_template('hall_details.html', hall=hall)
