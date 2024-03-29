@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color: #e5d7ec;
             margin: 0;
             padding: 20px;
         }
@@ -15,7 +15,7 @@
         .container {
             max-width: 600px;
             margin: 0 auto;
-            background-color: #fff;
+            background-color: #c1a8c4;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -41,7 +41,7 @@
 
         .search-button {
             padding: 8px 16px;
-            background-color: #008CBA;
+            background-color: #552f64;
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -50,7 +50,7 @@
         }
 
         .search-button:hover {
-            background-color: #005F6B;
+            background-color: #361d40;
         }
 
         .search-results {
@@ -74,7 +74,7 @@
         }
 
         .add-button {
-            background-color: #4CAF50;
+            background-color: #594b63;
             color: white;
             padding: 8px 16px;
             border: none;
@@ -84,7 +84,7 @@
         }
 
         .add-button:hover {
-            background-color: #45a049;
+            background-color: #352938;
         }
 
         .back-button {
@@ -92,7 +92,7 @@
             margin-top: 20px;
             text-align: center;
             text-decoration: none;
-            background-color: #7e57c2; /* Purple color */
+            background-color: #9875a5; /* Purple color */
             color: #fff;
             padding: 10px 20px;
             border-radius: 5px;
@@ -106,15 +106,14 @@
 </head>
 <body>
     <div class="container">
+        <a href="{{ url_for('dashboard', username=session.get('username')) }}" class="back-button">Dashboard</a>
         <h1>Add Friends</h1>
-        
         <!-- Search form -->
         <form class="search-form" action="/add_friend" method="GET">
-            <input class="search-input" type="text" name="search_query" placeholder="Enter username...">
+            <input class="search-input" type="text" name="search_query" placeholder="Enter username...🔎">
             <button class="search-button" type="submit">Search</button>
         </form>
-        <!-- Button to go back to dashboard -->
-        <a href="{{ url_for('dashboard', username=session.get('username')) }}" class="back-button">Dashboard</a>
+
         
         <!-- Display search results -->
         <div class="search-results">

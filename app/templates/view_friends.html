@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color: #e5d7ec;
             margin: 0;
             padding: 20px;
         }
@@ -15,7 +15,7 @@
         .container {
             max-width: 600px;
             margin: 0 auto;
-            background-color: #fff;
+            background-color: #c1a8c4;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -53,7 +53,7 @@
         }
 
         .remove-button {
-            background-color: #ff6347; /* Red color */
+            background-color: #f4c2b9; /* Red color */
             color: #fff;
             padding: 5px 10px;
             border: none;
@@ -71,7 +71,7 @@
             margin: 20px auto 0; /* Center the button horizontally and add some space at the top */
             text-align: center;
             text-decoration: none;
-            background-color: #7e57c2; /* Purple color */
+            background-color: #9875a5; /* Purple color */
             color: #fff;
             padding: 10px 20px;
             border-radius: 5px;
@@ -92,7 +92,7 @@
             <ul>
                 {% for friend in friends %}
                     <li>
-                        <span class="friend-name">{{ friend.username }}</span>
+                        <span class="friend-name">🤵{{ friend.username }}</span>
                         <form action="/remove_friend/{{ friend.id }}" method="POST">
                             <button class="remove-button" type="submit">Remove</button>
                         </form>

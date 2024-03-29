@@ -399,18 +399,18 @@ def buy_tickets(movie_title, username):
     # Pass all seats to the template, including unavailable ones
     return render_template('buy_ticket.html', movie=movie, username=username, all_seats=all_seats)
 
-@app.route('/find_theatre')
-def find_theatre():
+@app.route('/find_theatre/<username>')
+def find_theatre(username):
     # Fetch all hall details from the database
     halls = Hall_Details.query.all()
 
     # Pass the list of hall details to the find_theatre template
-    return render_template('find_theatre.html', halls=halls)
+    return render_template('find_theatre.html', halls=halls,username=username)
 
-@app.route('/hall_details/<hall_name>')
-def hall_details(hall_name):
+@app.route('/hall_details/<hall_name>/<username>')
+def hall_details(hall_name,username):
     hall = Hall_Details.query.filter_by(hall_name=hall_name).first_or_404()
-    return render_template('hall_details.html', hall=hall)
+    return render_template('hall_details.html', hall=hall,username=username)
 
 
 

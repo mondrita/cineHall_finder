@@ -64,7 +64,7 @@
             <p>{{ hall.location }}</p>
         </div>
         <div class="button-container">
-            <a href="{{ url_for('hall_details', hall_name=hall.hall_name) }}" class="theatre-button">View Details</a>
+            <a href="{{ url_for('hall_details', hall_name=hall.hall_name, username=username) }}" class="theatre-button">View Details</a>
 
             <a href="{{ hall.direction }}" target="_blank" class="theatre-button">View Directions</a>
         </div>
