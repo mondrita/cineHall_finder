@@ -3,18 +3,12 @@
 {% block content %}
     <title>{{ movie.Title }} - Movie Details</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #C8A2C8;
-            margin: 0;
-            padding: 0;
-        }
 
         .container {
             max-width: 800px;
             margin: 20px auto;
             padding: 20px;
-            background-color: #e2dfe3;
+            background-color: #c6b1cd;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
@@ -22,31 +16,38 @@
         h1 {
             text-align: center;
             color: #333;
+            margin-bottom: 20px;
         }
 
         .movie-details {
-            list-style: none;
             padding: 0;
             margin: 0;
         }
 
         .movie-item {
-            padding: 20px;
+            padding: 10px;
             border-bottom: 1px solid #ccc;
-            transition: background-color 0.3s ease;
-            margin-bottom: 10px; /* Add margin-bottom to create space between each movie detail */
         }
-
-
 
         .movie-title {
             font-weight: bold;
             color: #333;
         }
 
-        .product-price {
-            color: #555;
+        .movie-info {
+            margin-bottom: 10px;
+            text-align: left;
         }
+
+        .movie-info strong {
+            font-weight: bold;
+            color: #622A77;
+        }
+
+        .trailer {
+            margin-bottom: 20px;
+        }
+
         .rating-review-btn {
             display: inline-block;
             padding: 10px 20px;
@@ -67,29 +68,54 @@
 <body>
     <div class="container">
         <h1>{{ movie.Title }}</h1>
+        {% if trailer_video_id %}
+        <div class="trailer">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ trailer_video_id }}" frameborder="0" allowfullscreen></iframe>
+        </div>
+        {% else %}
+        <p>No trailer available.</p>
+        {% endif %}
         <ul class="movie-details">
             <li class="movie-item">
-                <span><strong>Genre:</strong> {{ movie.Genre }}</span><br>
-                <span style="margin-bottom: 10px;"><strong>Description:</strong> {{ movie.Description }}</span><br>
-                <span style="margin-bottom: 10px;"><strong>Director:</strong> {{ movie.Director }}</span><br>
-                <span style="margin-bottom: 10px;"><strong>Actors:</strong> {{ movie.Actors }}</span><br>
-                <span style="margin-bottom: 10px;"><strong>Year:</strong> {{ movie.Year }}</span><br>
-                <span style="margin-bottom: 10px;"><strong>Runtime:</strong> {{ movie.Runtime }}</span><br>
-                <span style="margin-bottom: 10px;"><strong>Rating:</strong> {{ movie.Rating }}</span><br>
-                <span style="margin-bottom: 10px;"><strong>Votes:</strong> {{ movie.Votes }}</span><br>
-                <span style="margin-bottom: 10px;"><strong>Revenue:</strong> {{ movie.Revenue }}</span><br>
-                <span style="margin-bottom: 10px;"><strong>Metascore:</strong> {{ movie.Metascore }}</span><br>
-
-            
+                <div class="movie-info">
+                    <strong>Genre:</strong> {{ movie.Genre }}
+                </div>
+                <div class="movie-info">
+                    <strong>Description:</strong> {{ movie.Description }}
+                </div>
+                <div class="movie-info">
+                    <strong>Director:</strong> {{ movie.Director }}
+                </div>
+                <div class="movie-info">
+                    <strong>Actors:</strong> {{ movie.Actors }}
+                </div>
+                <div class="movie-info">
+                    <strong>Year:</strong> {{ movie.Year }}
+                </div>
+                <div class="movie-info">
+                    <strong>Runtime:</strong> {{ movie.Runtime }}
+                </div>
+                <div class="movie-info">
+                    <strong>Rating:</strong> {{ movie.Rating }}
+                </div>
+                <div class="movie-info">
+                    <strong>Votes:</strong> {{ movie.Votes }}
+                </div>
+                <div class="movie-info">
+                    <strong>Revenue:</strong> {{ movie.Revenue }}
+                </div>
+                <div class="movie-info">
+                    <strong>Metascore:</strong> {{ movie.Metascore }}
+                </div>
             </li>
-            <form action="{{ url_for('add_to_wishlist') }}" method="POST">
-                <input type="hidden" name="Rank" value="{{ movie.Rank }}">
-                <input type="hidden" name="user_id" value="{{ user_id }}">
-                <button type="submit" class="rating-review-btn">Add to Watchlist</button>
-            </form>
-            <a href="/movie/{{ movie.Rank }}/rate_review?username={{ username }}" class="rating-review-btn">Rate and Review this Movie</a>
-
         </ul>
+        <form action="{{ url_for('add_to_wishlist') }}" method="POST">
+            <input type="hidden" name="Rank" value="{{ movie.Rank }}">
+            <input type="hidden" name="user_id" value="{{ user_id }}">
+            <button type="submit" class="rating-review-btn">Add to Watchlist</button>
+        </form>
+        <a href="/movie/{{ movie.Rank }}/rate_review?username={{ username }}" class="rating-review-btn">Rate and Review this Movie</a>
+
         <div class="ratings-reviews">
             <h2>Ratings and Reviews</h2>
             {% if ratings_reviews %}

@@ -3,6 +3,7 @@ from flask import render_template, request, redirect, url_for,flash,session,json
 from app.models import User, Movie_Data, Wishlist, UserPreferences, RatingReview, hall, Friendship,Hall_Details, Seat
 from sqlalchemy.sql import text,or_,func
 from math import ceil 
+from googleapiclient.discovery import build
 
 
 @app.route('/')
@@ -176,7 +177,8 @@ def wishlist_page(username):
         return render_template('wishlist.html', user=user, wishlist_data=wishlist_data,username=username)
     else:
         return "User not found."
-
+#####################################################################
+    
 @app.route('/movie/<Rank>/<username>')
 def movie_page(Rank,username):
     # Retrieve the movie details from the database based on the product ID
@@ -187,9 +189,40 @@ def movie_page(Rank,username):
     ratings_reviews = RatingReview.query.filter_by(movie_rank=movie.Rank).all()
     if movie is None:
         abort(404)
-    return render_template('movie.html', movie=movie, username=username,ratings_reviews=ratings_reviews)
+    trailer_video_id = get_trailer(movie.Title)
+    return render_template('movie.html', movie=movie, username=username,ratings_reviews=ratings_reviews, trailer_video_id=trailer_video_id)
 
 
+def get_trailer(movie_title):
+    api_key = 'AIzaSyDrhXeRaiBtJHS_VKbBzEX3tbnd9JwXEyU'
+    youtube = build('youtube', 'v3', developerKey=api_key)
+    search_response = youtube.search().list(
+        q=movie_title + " trailer",
+        part='id',
+        maxResults=1
+    ).execute()
+
+    # Extract video ID from the response
+    video_id = search_response['items'][0]['id']['videoId'] if search_response['items'] else None
+    return video_id
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##############################################################################
 @app.route('/movie/<string:Rank>/rate_review', methods=['GET', 'POST'])
 def movie_rating_review(Rank):
     # Check if the user is authenticated

@@ -15,6 +15,7 @@
             font-family: Font1,Arial, sans-serif;
             background-color: #e5d7ec; /* Light pastel color */
             color: #615f5f;
+            text-align: center;
         }
         .navbar {
             display: flex;
@@ -41,12 +42,16 @@
         .dropdown-content {
             display: none;
             position: absolute;
-            background-color: #333;
+            background-color: #867192;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 1;
+            border-radius: 5px;
         }
         .dropdown-content a {
             display: block;
+        }
+        .dropdown-content:hover {
+            background-color: #552f64;
         }
         .icons {
             display: flex;
@@ -125,8 +130,12 @@
                 <div class="dropdown-content">
                     <a href="{{ url_for('movies_genre') }}" >GENRES</a>
                 </div>
-                <a href="{{ url_for('current_movies', username=username) }}" class="all-products-button">THEATRE</a>
-                <a href="{{ url_for('find_theatre', username=username) }}" class="all-products-button">FIND THEATRE</a>
+            </div>
+            <div class="dropdown">
+                <a href="{{ url_for('current_movies', username=username) }}" class="all-products-button">CURRENTLY SHOWING</a>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('find_theatre', username=username) }}" >FIND THEATRE</a>
+                </div>
 <! -- ABOVE LINE NEEDS CHANGING -->
             </div>
         </div>
