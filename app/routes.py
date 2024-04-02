@@ -74,7 +74,7 @@ def forgot_password():
             return "Invalid username or security answer."
     return render_template('forgot_password.html')
 
-
+##################################################################
 @app.route('/dashboard/<username>', methods=['GET', 'POST'])
 def dashboard(username):
     user = User.query.filter_by(username=username).first()
@@ -116,8 +116,10 @@ def dashboard(username):
             
         return render_template('dashboard.html', user=user_info, upcoming_movies=upcoming_movies, recommended_movies=recommended_movies,trending_movies=trending_movies,username=username)
     else:
-        return "User not found."
+        return "User not found." 
 
+
+#####################################################
     
 
 @app.route('/search_movies/<username>', methods=['GET', 'POST'])
@@ -205,19 +207,6 @@ def get_trailer(movie_title):
     # Extract video ID from the response
     video_id = search_response['items'][0]['id']['videoId'] if search_response['items'] else None
     return video_id
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -313,8 +302,9 @@ def search(username):
 
 ################### ORGANIZE BY GENRE ##################
 
-@app.route('/movies_genre')
-def movies_genre():
+@app.route('/movies_genre/<username>')
+def movies_genre(username):
+    username = session.get('username')
     # Query movies grouped by genre
     movies_by_genre = {}
     movies = Movie_Data.query.all()
@@ -327,7 +317,7 @@ def movies_genre():
                 genre_movies.append(movie)  # Append the current movie to the genre's movies list
                 movies_by_genre[genre] = genre_movies  # Update the movies by genre dictionary
     
-    return render_template('movies_by_genre.html', movies_by_genre=movies_by_genre)
+    return render_template('movies_by_genre.html', movies_by_genre=movies_by_genre,username=username)
 
 @app.route('/logout')
 def logout():
@@ -338,7 +328,7 @@ def logout():
 
 
 
-###############################################
+############################################### WISHLIST ################################
 @app.route('/add_to_wishlist', methods=['POST'])
 def add_to_wishlist():
     if request.method == 'POST':
@@ -395,6 +385,7 @@ def remove_from_wishlist(Rank):
 
         return redirect(url_for('wishlist_page',username=username))
 
+################################# THEATRE ##############################
 from datetime import datetime
 
 @app.route('/current_movies/<username>')
@@ -446,7 +437,7 @@ def hall_details(hall_name,username):
     return render_template('hall_details.html', hall=hall,username=username)
 
 
-
+############################### FRIENDS FEATURE ###########################
 @app.route('/add_friend', methods=['GET'])
 def add_friend():
     current_username = session.get('username')
@@ -466,9 +457,6 @@ def add_friend():
     else:
         # Redirect the user to the login page if username is not in session
         return redirect(url_for('login'))
-
-
-
 
 @app.route('/add_friend/<int:friend_id>/add', methods=['POST'])
 def add_friend_to_db(friend_id):

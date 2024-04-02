@@ -24,6 +24,7 @@
 
         .genre-section {
             margin-bottom: 30px;
+            position: relative; /* Position relative for arrow placement */
         }
 
         .genre-section h2 {
@@ -31,13 +32,22 @@
             margin-bottom: 10px;
         }
 
+        .movie-grid-container {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
         .movie-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            grid-gap: 20px;
+            display: flex;
+            gap: 20px;
+            transition: transform 0.3s ease;
         }
 
         .movie {
+            position: relative;
+            flex: 0 0 auto;
+            width: 200px;
             background-color: #eddeea;
             padding: 10px;
             border-radius: 5px;
@@ -51,43 +61,101 @@
         .menu-button {
             display: inline-block;
             padding: 10px 20px;
-            background-color: #392f55;
+            background-color: #78627c;
             color: #fff;
             text-decoration: none;
             margin-right: 10px;
-            border-radius: 5px;
         }
-        .movie h3 {
-            margin-top: 0;
-            margin-bottom: 5px;
+        .menu-button:hover {
+            background-color: #5b506b;
         }
 
-        .movie p {
-            margin-top: 0;
+        .arrow {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 30px;
+            color: #704a7c;
+            z-index: 1; 
+        }
+
+        .left-arrow {
+            left: 10px;
+            transform: scaleX(-1);
+        }
+
+        .right-arrow {
+            right: 10px;
+        }
+        .view-details-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            display: inline-block;
+            padding: 5px 5px;
+            background-color: #825f8f;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .view-details-btn:hover {
+            background-color: #49195b;
         }
     </style>
 </head>
 <body>
     
     <div class="container">
-            <!-- Menu buttons -->
-            <div class="menu-buttons">
-                <a href="{{ url_for('dashboard', username=session.username) }}" class="menu-button">Dashboard</a>
-            </div>
+        <!-- Menu buttons -->
+        <div class="menu-buttons">
+            <a href="{{ url_for('dashboard', username=session.username) }}" class="menu-button">Dashboard</a>
+        </div>
         <h1>FIND THE GENRE THAT'S PERFECT FOR YOU! 🍿</h1>
         {% for genre, movies in movies_by_genre.items() %}
             <div class="genre-section">
                 <h2>{{ genre }}</h2>
-                <div class="movie-grid">
-                    {% for movie in movies %}
-                        <div class="movie">
-                            <h3>{{ movie.Title }}</h3>
-                            <p>{{ movie.Description }}</p>
-                            <!-- Add more movie details as needed -->
-                        </div>
-                    {% endfor %}
+                <div class="movie-grid-container">
+                    <!-- Left arrow for this genre section -->
+                    <div class="arrow left-arrow" id="{{ genre|replace(' ', '') }}LeftArrow">&#10132;</div>
+                    <div class="movie-grid" id="{{ genre|replace(' ', '') }}MovieGrid">
+                        {% for movie in movies %}
+                            <div class="movie">
+                                <h3>{{ movie.Title }}</h3>
+                                <p>{{ movie.Description }}</p>
+                                <a href="{{ url_for('movie_page', Rank=movie.Rank, username=username) }}" class="view-details-btn">View Movie</a>
+                                <!-- Add more movie details as needed -->
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <!-- Right arrow for this genre section -->
+                    <div class="arrow right-arrow" id="{{ genre|replace(' ', '') }}RightArrow">&#10132;</div>
                 </div>
             </div>
+            <script>
+                const {{ genre|replace(' ', '') }}MovieGrid = document.getElementById('{{ genre|replace(' ', '') }}MovieGrid');
+                const {{ genre|replace(' ', '') }}RightArrow = document.getElementById('{{ genre|replace(' ', '') }}RightArrow');
+                const {{ genre|replace(' ', '') }}LeftArrow = document.getElementById('{{ genre|replace(' ', '') }}LeftArrow');
+
+                const scrollDistance{{ genre|replace(' ', '') }} = 220; // Adjust scroll distance as needed
+
+                let currentScrollPosition{{ genre|replace(' ', '') }} = 0;
+
+                {{ genre|replace(' ', '') }}RightArrow.addEventListener('click', () => {
+                    currentScrollPosition{{ genre|replace(' ', '') }} += scrollDistance{{ genre|replace(' ', '') }};
+                    {{ genre|replace(' ', '') }}MovieGrid.style.transform = `translateX(-${currentScrollPosition{{ genre|replace(' ', '') }}}px)`;
+                });
+
+                {{ genre|replace(' ', '') }}LeftArrow.addEventListener('click', () => {
+                    currentScrollPosition{{ genre|replace(' ', '') }} -= scrollDistance{{ genre|replace(' ', '') }};
+                    if (currentScrollPosition{{ genre|replace(' ', '') }} < 0) {
+                        currentScrollPosition{{ genre|replace(' ', '') }} = 0;
+                    }
+                    {{ genre|replace(' ', '') }}MovieGrid.style.transform = `translateX(-${currentScrollPosition{{ genre|replace(' ', '') }}}px)`;
+                });
+            </script>
         {% endfor %}
     </div>
 </body>

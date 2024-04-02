@@ -94,10 +94,10 @@
         <h1>{{ movie.Movie_Title }}</h1>
         <div class="movie-info">
             <p>Duration: {{ movie.duration }}</p>
-            <p>Ticket Price: ${{ movie.Ticket_Price }}</p>
+            <p>Ticket Price: Tk.{{ movie.Ticket_Price }}</p>
             {% if movie.three_D == 'yes' %}
             <div class="format-options">
-                <p>Please choose format (3D will cost 100tk extra):</p>
+                <p>Please choose format (3D will cost Tk.100 extra):</p>
                 <input type="radio" id="2D" name="format" value="2D" checked>
                 <label for="2D">2D</label>
                 <input type="radio" id="3D" name="format" value="3D">
@@ -131,7 +131,7 @@
                 </div>
             {% endfor %}
             <input type="hidden" name="selected_seat" id="selected_seat" value="">
-            <input type="submit" value="Buy">
+            <input type="submit" value="Proceed to Payment">
         </form>
     </div>
 

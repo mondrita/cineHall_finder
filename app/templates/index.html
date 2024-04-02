@@ -18,23 +18,23 @@
 
     /* CSS for the background image */
     body {
-        background-image: url('/static/img.jpg'); /* Set the background image */
+        background-image: url('/static/img1.jpg'); /* Set the background image */
         background-size: cover;
         background-position: center;
     }
 
     /* CSS for glowing effect */
     .glow {
-        animation: glow 2s ease-in-out infinite alternate;
+        animation: glow 15s ease-in-out infinite alternate;
         color: #31163d; /* Change text color to #884EA0 */
     }
 
     @keyframes glow {
         from {
-            text-shadow: 0 0 10px #989599, 0 0 20px #989599, 0 0 30px#989599, 0 0 40px #989599, 0 0 50px #989599, 0 0 60px #989599, 0 0 70px #989599;
+            text-shadow: 0 0 10px #989599, 0 0 20px #989599, 0 0 30px#989599, 0 0 40px #989599, 0 0 50px #989599;
         }
         to {
-            text-shadow: 0 0 20px #cecccf, 0 0 30px  #cecccf, 0 0 40px #cecccf, 0 0 50px  #cecccf, 0 0 60px #cecccf, 0 0 70px #cecccf, 0 0 80px  #cecccf;
+            text-shadow: 0 0 20px #cecccf, 0 0 30px  #cecccf, 0 0 40px #cecccf, 0 0 50px  #cecccf;
         }
     }
 
@@ -58,6 +58,7 @@
     .poster {
         font-family: myFont;
         font-size: 55px;
+        color: #31163d;
     }
 </style>
 {% endblock %}

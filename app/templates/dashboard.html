@@ -13,10 +13,15 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            text-align: center; /* Center align all content */
+            width: 100%; /* Take up full width of the page */
         }
         .welcome-message {
             font-size: 35px;
             margin-bottom: 15px;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
         }
         .menu-buttons {
             margin-bottom: 20px;
@@ -24,7 +29,7 @@
         .menu-button {
             display: inline-block;
             padding: 10px 20px;
-            background-color: #392f55;
+            background-color: #78627c;
             color: #fff;
             text-decoration: none;
             margin-right: 10px;
@@ -36,14 +41,17 @@
             background-color: #f0f0f0;
             padding: 10px;
             margin-bottom: 20px;
+            text-align: centre;
         }
         .upcoming-movies {
             margin-bottom: 20px;
+            text-align: centre;
         }
 
         .wishlist {
             background-color: #f0f0f0;
             padding: 60px;
+
         }
         .movie-box {
             background-color: #c09ec8;
@@ -118,13 +126,9 @@
         <div class="user-info">
             <h2>User Information</h2>
             <p><strong>Username:</strong> {{ user.username }}</p>
-            <p><strong>Email:</strong> {{ user.email }}</p>
-        </div>
-
-        <div class="add-friend">
-            <h2>Friends</h2>
+            <p><strong>Email:</strong> {{ user.email }}</p><br>
             <a href="{{ url_for('add_friend') }}" class="menu-button">Add Friend</a>
-            <a href="{{ url_for('view_friends') }}" class="menu-button">View Friend</a>
+            <a href="{{ url_for('view_friends') }}" class="menu-button">View Friendlist</a>
         </div>
 
         <!-- Upcoming movies -->
@@ -174,7 +178,7 @@
             <h2>Search Movies to Add to Watchlist 📺</h2>
             <form action="{{ url_for('search_movies', username=user.username) }}" method="GET">
                 <input type="text" name="query" placeholder="Search movies...">
-                <button type="submit">Search</button>
+                <button type="submit" >Search</button>
             </form>
         </div>
     </div>
