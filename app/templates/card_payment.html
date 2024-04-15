@@ -1,0 +1,43 @@
+{% extends "base1.html" %}
+
+{% block content %}
+<style>
+    .card-payment-container {
+        text-align: center;
+        margin: 20px auto;
+        background-color: #c3afd4;
+        max-width: 700px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+    input, button {
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    button {
+        cursor: pointer;
+        border: none;
+        background-color: #a28ba9;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+    button:hover {
+        background-color: #6f608d;
+    }
+</style>
+
+<div class="card-payment-container">
+    <form action="{{ url_for('process_card_payment', movie_title=movie_title, username=username) }}" method="post">
+
+        <h2>Card Payment</h2>
+        <p>Total Price: ${{ total_price }}</p>
+        <input type="text" name="card_number" placeholder="Card Number" required><br>
+        <input type="text" name="card_holder_name" placeholder="Card Holder Name" required><br>
+        <input type="month" name="expiration_date" placeholder="Expiration Date" required><br>
+        <input type="number" name="cvv" placeholder="CVV" required><br>
+        <button type="submit">Confirm Payment</button>
+    </form>
+</div>
+{% endblock %}
