@@ -1,0 +1,56 @@
+{% extends "base1.html" %}
+
+{% block content %}
+<style>
+    .movie-card {
+        position: relative;
+        width: 200px;
+        height: 300px;
+        margin: 10px;
+        overflow: hidden;
+        display: inline-block; /* Change to inline-block for horizontal layout */
+    }
+    .movie-image {
+        width: 100%;
+        height: 100%;
+        transition: transform 0.5s ease;
+    }
+    .movie-info {
+        text-align: center;
+        position: absolute;
+        bottom: 0;
+        background: rgba(162, 138, 168, 0.8);
+        color: white;
+        width: 120%;
+        transform: translateY(100%);
+        transition: transform 0.5s ease;
+    }
+    .movie-card:hover .movie-image {
+        transform: translateY(-100%);
+    }
+    .movie-card:hover .movie-info {
+        transform: translateY(0);
+    }
+    .scroll-container {
+        overflow-x: auto;
+        white-space: nowrap; /* Ensures items stay in one line */
+    }
+</style>
+<div class="container">
+    <h1>{{ username }}'s Booking History</h1>
+    <div class="scroll-container">
+        {% for ticket, movie in bookings %}
+        <div class="movie-card">
+            <img src="{{ movie.pic }}" alt="{{ movie.Movie_Title }}" class="movie-image">
+            <div class="movie-info">
+                <h5>{{ movie.Movie_Title }}</h5>
+                <p>Date: {{ ticket.date.strftime('%Y-%m-%d') }}</p>
+                <p>Time: {{ ticket.time }}</p>
+                <p>Format: {{ ticket.format }}</p>
+                <p>Ticket Price: ${{ ticket.ticket_price }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

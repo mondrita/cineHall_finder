@@ -524,7 +524,11 @@ def hall_details(hall_name,username):
     return render_template('hall_details.html', hall=hall,username=username)
 
 
-
+@app.route('/booking_history/<username>')
+def booking_history(username):
+    # Fetch all sold tickets for the given username and join with the hall table to get movie details
+    bookings = db.session.query(SoldTicket, hall).join(hall, hall.Movie_Title == SoldTicket.movie_title).filter(SoldTicket.username == username).all()
+    return render_template('booking_history.html', bookings=bookings,username=username)
 
 
 
