@@ -1,0 +1,54 @@
+{% extends "base1.html" %}
+
+{% block content %}
+<style>
+    .mobile-payment-container {
+        text-align: center;
+        margin: 20px auto;
+        background-color: #c3afd4;
+        max-width: 700px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+    input, button {
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 5px;
+        width: 90%;
+    }
+    button {
+        cursor: pointer;
+        border: none;
+        background-color: #a28ba9;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+    button:hover {
+        background-color: #6f608d;
+    }
+    .form-item {
+        margin-bottom: 15px;
+    }
+</style>
+
+<div class="mobile-payment-container">
+    <h2>Mobile Payment</h2>
+    <p>Total Price: ${{ total_price }}</p>
+    <form action="{{ url_for('process_mobile_payment', movie_title=movie_title, username=username) }}" method="post">
+        <div class="form-item">
+            <input type="text" name="mobile_number" placeholder="Your Mobile Number" required>
+        </div>
+        <div class="form-item">
+            <input type="text" name="transaction_id" placeholder="Transaction ID" required>
+        </div>
+        <!-- Hidden inputs for passing movie details -->
+        <input type="hidden" name="movie_title" value="{{ movie_title }}">
+        <input type="hidden" name="total_price" value="{{ total_price }}">
+        <input type="hidden" name="movie_time" value="{{ movie_time }}">
+        
+        <button type="submit">Confirm Payment</button>
+    </form>
+    <p>Please enter your mobile number and the transaction ID you received after making the payment via your mobile banking app.</p>
+</div>
+{% endblock %}
