@@ -476,18 +476,40 @@ def card_payment(movie_title, username):
         return render_template('payment_successful.html', username=username)
 
 
-@app.route('/mobile_payment/<movie_title>/<username>', methods=['GET'])
+@app.route('/mobile_payment/<movie_title>/<username>', methods=['GET','POST'])
 def mobile_payment(movie_title, username):
     # Similar extraction as card_payment
-    selected_seats = request.args.get('selected_seats')
-    format = request.args.get('format')
-    time = request.args.get('time')
-    date = request.args.get('date')
-    ticket_price = request.args.get('ticket_price')
-    return render_template('mobile_payment.html', movie_title=movie_title, username=username,
-                           total_price=ticket_price, movie_time=time, selected_seats=selected_seats,format=format,date=date)
+    if request.method == 'GET':
+        selected_seats = request.args.get('selected_seats')
+        format = request.args.get('format')
+        time = request.args.get('time')
+        date = request.args.get('date')
+        ticket_price = request.args.get('ticket_price')
+        return render_template('mobile_payment.html', movie_title=movie_title, username=username,
+                            total_price=ticket_price, movie_time=time, selected_seats=selected_seats,format=format,date=date)
+    elif request.method == 'POST':
 
+        # Fetch data from form or use what was passed from the GET request
+        selected_seats = request.form.get('selected_seats')
+        format = request.form.get('format')
+        time = request.form.get('time')
+        date = request.form.get('date')
+        ticket_price = request.form.get('total_price')
 
+        # Convert date and time from string to appropriate formats
+        from datetime import datetime
+        date = datetime.strptime(date, '%Y-%m-%d').date()
+        #time = datetime.strptime(time, '%H:%M').time()'''
+
+        # Create and add sold ticket to the database
+        new_ticket = SoldTicket(username=username, movie_title=movie_title,
+                                ticket_price=ticket_price, date=date, time=time, format=format)
+        db.session.add(new_ticket)
+        db.session.commit()
+
+        # Redirect to a success page or render a success message
+        return render_template('payment_successful.html', username=username)
+    
 @app.route('/find_theatre/<username>')
 def find_theatre(username):
     # Fetch all hall details from the database

@@ -33,14 +33,21 @@
 </style>
 
 <div class="mobile-payment-container">
-    <h2>Mobile Payment</h2>
-    <p>Movie Title: {{ movie_title }}</p>
-    <p>Total Price: ${{ total_price }}</p>
-    <p>Format: {{ format }}</p>
-    <p>Showtime: {{ movie_time }}</p>
-    <p>Date: {{ date }}</p>
-    <input type="text" name="mobile_number" placeholder="Mobile Number" required><br>
-    <input type="text" name="transaction_id" placeholder="Transaction ID" required><br>
-    <button type="button" onclick="alert('Payment processing is not set up yet.');">Confirm Payment</button>
+    <form action="{{ url_for('mobile_payment', movie_title=movie_title, username=username) }}" method="post">
+        <h2>Mobile Payment</h2>
+        <p>Movie Title: {{ movie_title }}</p>
+        <p>Total Price: ${{ total_price }}</p>
+        <p>Format: {{ format }}</p>
+        <p>Showtime: {{ time }}</p>
+        <p>Date: {{ date }}</p>
+        <input type="hidden" name="selected_seats" value="{{ selected_seats }}">
+        <input type="hidden" name="format" value="{{ format }}">
+        <input type="hidden" name="time" value="{{ time }}">
+        <input type="hidden" name="date" value="{{ date }}">
+        <input type="hidden" name="total_price" value="{{ total_price }}">
+        <input type="text" name="mobile_number" placeholder="Mobile Number" required><br>
+        <input type="text" name="transaction_id" placeholder="Transaction ID" required><br>
+        <button type="submit">Confirm Payment</button>
+    </form>
 </div>
 {% endblock %}
