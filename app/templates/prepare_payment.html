@@ -23,36 +23,41 @@
     .payment-option:hover {
         background-color: #d1bcd2;
     }
+    .info {
+        text-align: left;
+        padding: 10px;
+        font-size: 18px;
+        color: #333;
+        border-bottom: 1px solid #ccc;
+    }
 </style>
 
 <div class="payment-options-container">
     <h2>Select Payment Method</h2>
-    <div onclick="redirectToCardPayment()" class="payment-option">Pay via Card</div>
-    <div onclick="redirectToMobilePayment()" class="payment-option">Pay via Mobile Banking</div>
-
+    <div class="info">
+        <strong>Movie Title:</strong> {{ movie_title }}<br>
+        <strong>Ticket Price:</strong> Tk.{{ ticket_price }}<br>
+        <strong>Format:</strong> {{ format }}<br>
+        <strong>Time:</strong> {{ time }}<br>
+        <strong>Date:</strong> {{ date }}<br>
+        <strong>Selected Seats:</strong> {{ selected_seats }}<br>
+    </div>
+    <form action="{{ url_for('card_payment', movie_title=movie_title, username=username) }}" method="get">
+        <input type="hidden" name="selected_seats" value="{{ selected_seats }}">
+        <input type="hidden" name="format" value="{{ format }}">
+        <input type="hidden" name="time" value="{{ time }}">
+        <input type="hidden" name="date" value="{{ date }}">
+        <input type="hidden" name="ticket_price" value="{{ ticket_price }}">
+        <input type="submit" value="Pay via Card" class="payment-option">
+    </form>
+    <form action="{{ url_for('mobile_payment', movie_title=movie_title, username=username) }}" method="get">
+            <input type="hidden" name="selected_seats" value="{{ selected_seats }}">
+            <input type="hidden" name="format" value="{{ format }}">
+            <input type="hidden" name="time" value="{{ time }}">
+            <input type="hidden" name="date" value="{{ date }}">
+            <input type="hidden" name="ticket_price" value="{{ ticket_price }}">
+            <input type="submit" value="Pay via Mobile" class="payment-option">
+    </form>
 </div>
-
-<script>
-function redirectToCardPayment() {
-    var baseUrl = "{{ url_for('card_payment', movie_title=movie_title, username=username) }}";
-    var queryParams = "?selected_seat=" + encodeURIComponent("{{ selected_seat }}") +
-                      "&format=" + encodeURIComponent("{{ format }}") +
-                      "&time=" + encodeURIComponent("{{ time }}") +
-                      "&date=" + encodeURIComponent("{{ date }}");
-    window.location.href = baseUrl + queryParams;
-}
-</script>
-
-<script>
-    function redirectToMobilePayment() {
-        var baseUrl = "{{ url_for('mobile_payment', movie_title=movie_title, username=username) }}";
-        var queryParams = "?selected_seat=" + encodeURIComponent("{{ selected_seat }}") +
-                          "&format=" + encodeURIComponent("{{ format }}") +
-                          "&time=" + encodeURIComponent("{{ time }}") +
-                          "&date=" + encodeURIComponent("{{ date }}");
-        window.location.href = baseUrl + queryParams;
-    }
-</script>
-    
-
 {% endblock %}
+

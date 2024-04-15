@@ -1,5 +1,7 @@
 from app import app,db
 from sqlalchemy.orm import relationship
+from datetime import datetime
+
 class Movie_Data(db.Model):
     __tablename__ = 'Movie_Data'
     Rank = db.Column(db.Integer, primary_key=True)
@@ -102,7 +104,7 @@ class Seat(db.Model):
 
 
 
-def populate_seats(movie_title, total_seats):
+'''def populate_seats(movie_title, total_seats):
     # Retrieve the movie from the database
     movie = hall.query.filter_by(Movie_Title=movie_title).first()
 
@@ -151,7 +153,7 @@ movies = {
 
 with app.app_context():
     for movie_title, total_seats in movies.items():
-        populate_seats(movie_title, total_seats)
+        populate_seats(movie_title, total_seats)'''
 
 
 class Hall_Details(db.Model):
@@ -165,3 +167,19 @@ class Hall_Details(db.Model):
 
     def __repr__(self):
         return f"<hall_details(Hall_Name='{self.hall_name}', Location='{self.location}', Direction='{self.direction}', Parking_Lot_Capacity='{self.parking_lot_capacity}', Food_Court_Items='{self.food_court_items}')>"
+    
+class SoldTicket(db.Model):
+    __tablename__ = 'sold_tickets'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), db.ForeignKey('user.username'), nullable=False)
+    movie_title = db.Column(db.String(255), db.ForeignKey('hall.Movie_Title'), nullable=False)
+    ticket_price = db.Column(db.Float, nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    time = db.Column(db.Text, nullable=False)
+    format = db.Column(db.String(50), nullable=False)  # Example formats: '2D', '3D', 'IMAX'
+    
+    user = relationship('User', backref='sold_tickets')
+    movie = relationship('hall', backref='tickets_sold')
+
+    def __repr__(self):
+        return f"<SoldTicket(username='{self.username}', movie_title='{self.movie_title}', date='{self.date}', time='{self.time}', format='{self.format}', ticket_price='{self.ticket_price}')>"

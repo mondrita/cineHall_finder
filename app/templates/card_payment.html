@@ -29,10 +29,18 @@
 </style>
 
 <div class="card-payment-container">
-    <form action="{{ url_for('process_card_payment', movie_title=movie_title, username=username) }}" method="post">
-
+    <form action="{{ url_for('card_payment', movie_title=movie_title, username=username) }}" method="post">
         <h2>Card Payment</h2>
+        <p>Movie Title: {{ movie_title }}</p>
         <p>Total Price: ${{ total_price }}</p>
+        <p>Format: {{ format }}</p>
+        <p>Showtime: {{ time }}</p>
+        <p>Date: {{ date }}</p>
+        <input type="hidden" name="selected_seats" value="{{ selected_seats }}">
+        <input type="hidden" name="format" value="{{ format }}">
+        <input type="hidden" name="time" value="{{ time }}">
+        <input type="hidden" name="date" value="{{ date }}">
+        <input type="hidden" name="total_price" value="{{ total_price }}">
         <input type="text" name="card_number" placeholder="Card Number" required><br>
         <input type="text" name="card_holder_name" placeholder="Card Holder Name" required><br>
         <input type="month" name="expiration_date" placeholder="Expiration Date" required><br>

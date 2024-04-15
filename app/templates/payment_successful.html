@@ -11,7 +11,7 @@
             <a href="{{ url_for('dashboard', username=username) }}" style="text-decoration: none; color: white; background-color: #392f55; padding: 10px 20px; margin-right: 10px; border-radius: 5px;">Return to Dashboard</a>
             
             <!-- Buy More Tickets Button -->
-            <a href="{{ url_for('buy_tickets', movie_title=movie_title, username=username) }}" style="text-decoration: none; color: white; background-color: #5b506b; padding: 10px 20px; border-radius: 5px;">Buy More Tickets</a>
+            <a href="{{ url_for('current_movies',username=username) }}" style="text-decoration: none; color: white; background-color: #5b506b; padding: 10px 20px; border-radius: 5px;">Buy More Tickets</a>
         </div>
     </div>
 </div>

@@ -111,6 +111,22 @@
         .search-container button:hover {
             background-color: #5b506b;
         }
+        .view-details-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            display: inline-block;
+            padding: 1px 1px;
+            background-color: #825f8f;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .view-details-btn:hover {
+            background-color: #49195b;
+        }
 
 
 
@@ -140,6 +156,7 @@
                     <div class="movie-box">
                         <p>{{ movie[0] }}</p> <!-- Display movie title -->
                         <div class="movie-description">{{ movie[1] }}</div> <!-- Movie description -->
+                        <a href="{{ url_for('movie_page', Rank=movie.Rank, username=username) }}" class="view-details-btn">View details</a>
                     </div>
                 {% endfor %}
             </div>
@@ -154,6 +171,7 @@
                     <div class="movie-box">
                         <p>{{ movie.Title }}</p> <!-- Display movie title -->
                         <div class="movie-description">{{ movie.Description }}</div> <!-- Movie description -->
+                        <a href="{{ url_for('movie_page', Rank=movie.Rank, username=username) }}" class="view-details-btn">View details</a>
                     </div>
                 {% endfor %}
             </div>
@@ -168,6 +186,7 @@
                     <div class="movie-box">
                         <p>{{ movie.Title }}</p> <!-- Display movie title -->
                         <div class="movie-description">{{ movie.Description }}</div> <!-- Movie description -->
+                        <a href="{{ url_for('movie_page', Rank=movie.Rank, username=username) }}" class="view-details-btn">View details</a>
                     </div>
                 {% endfor %}
             </div>

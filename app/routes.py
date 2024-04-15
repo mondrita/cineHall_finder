@@ -1,6 +1,6 @@
 from app import app, db
 from flask import render_template, request, redirect, url_for,flash,session,jsonify
-from app.models import User, Movie_Data, Wishlist, UserPreferences, RatingReview, hall, Friendship,Hall_Details, Seat
+from app.models import User, Movie_Data, Wishlist, UserPreferences, RatingReview, hall, Friendship,Hall_Details, Seat, SoldTicket
 from sqlalchemy.sql import text,or_,func
 from math import ceil 
 from googleapiclient.discovery import build
@@ -386,6 +386,13 @@ def remove_from_wishlist(Rank):
         return redirect(url_for('wishlist_page',username=username))
 
 ################################# THEATRE ##############################
+
+
+
+
+
+
+
 from datetime import datetime
 
 @app.route('/current_movies/<username>')
@@ -402,26 +409,84 @@ def current_movies(username):
 @app.route('/buy_tickets/<movie_title>/<username>', methods=['GET', 'POST'])
 def buy_tickets(movie_title, username):
     movie = hall.query.filter_by(Movie_Title=movie_title).first()
-    # Fetch all seats for the movie, not just available ones
     all_seats = Seat.query.filter_by(movie_title=movie_title).all()
     if request.method == 'POST':
-        # Logic to handle the ticket purchase
         selected_seat = request.form.get('selected_seat')
         if selected_seat:
-            # Split the selected_seat string into individual seat numbers
             selected_seat_numbers = selected_seat.split(',')
             for seat_number in selected_seat_numbers:
-                # Update the availability of the selected seat
                 seat = Seat.query.filter_by(movie_title=movie_title, seat_number=seat_number).first()
-                if seat:
+                if seat and seat.status == 'available':
                     seat.status = 'unavailable'
                 else:
-                    # Seat not found, handle gracefully (perhaps log or display a message)
-                    print(f"Seat {seat_number} not found for movie {movie_title}")
+                    # Handle seat not found or already booked
+                    print(f"Seat {seat_number} not found or already booked for movie {movie_title}")
             db.session.commit()
-            # Redirect or render a confirmation page
-    # Pass all seats to the template, including unavailable ones
+            # Redirect to the prepare_payment route with all data
+            return redirect(url_for('prepare_payment', movie_title=movie_title, username=username, 
+                                    selected_seats=selected_seat, format=request.form.get('format'),
+                                    time=request.form.get('time'), date=request.form.get('date')),ticket_price=request.form.get('ticket_price'))
+        else:
+            # Handle no seat selected case
+            print("No seats selected")
     return render_template('buy_ticket.html', movie=movie, username=username, all_seats=all_seats)
+
+
+@app.route('/prepare_payment/<movie_title>/<username>', methods=['GET'])
+def prepare_payment(movie_title, username):
+    selected_seats = request.args.get('selected_seats')
+    format = request.args.get('format')
+    time = request.args.get('time')
+    date = request.args.get('date')
+    ticket_price = request.args.get('ticket_price')
+    return render_template('prepare_payment.html', movie_title=movie_title, username=username, selected_seats=selected_seats, format=format, time=time, date=date, ticket_price=ticket_price)
+
+@app.route('/card_payment/<movie_title>/<username>', methods=['GET', 'POST'])
+def card_payment(movie_title, username):
+    if request.method == 'GET':
+        selected_seats = request.args.get('selected_seats')
+        format = request.args.get('format')
+        time = request.args.get('time')
+        date = request.args.get('date')
+        ticket_price = request.args.get('ticket_price')
+        return render_template('card_payment.html', movie_title=movie_title, username=username,
+                               total_price=ticket_price, time=time, selected_seats=selected_seats,
+                               format=format, date=date)
+    elif request.method == 'POST':
+
+        # Fetch data from form or use what was passed from the GET request
+        selected_seats = request.form.get('selected_seats')
+        format = request.form.get('format')
+        time = request.form.get('time')
+        date = request.form.get('date')
+        ticket_price = request.form.get('total_price')
+
+        # Convert date and time from string to appropriate formats
+        from datetime import datetime
+        date = datetime.strptime(date, '%Y-%m-%d').date()
+        #time = datetime.strptime(time, '%H:%M').time()'''
+
+        # Create and add sold ticket to the database
+        new_ticket = SoldTicket(username=username, movie_title=movie_title,
+                                ticket_price=ticket_price, date=date, time=time, format=format)
+        db.session.add(new_ticket)
+        db.session.commit()
+
+        # Redirect to a success page or render a success message
+        return render_template('payment_successful.html', username=username)
+
+
+@app.route('/mobile_payment/<movie_title>/<username>', methods=['GET'])
+def mobile_payment(movie_title, username):
+    # Similar extraction as card_payment
+    selected_seats = request.args.get('selected_seats')
+    format = request.args.get('format')
+    time = request.args.get('time')
+    date = request.args.get('date')
+    ticket_price = request.args.get('ticket_price')
+    return render_template('mobile_payment.html', movie_title=movie_title, username=username,
+                           total_price=ticket_price, movie_time=time, selected_seats=selected_seats,format=format,date=date)
+
 
 @app.route('/find_theatre/<username>')
 def find_theatre(username):
@@ -435,6 +500,12 @@ def find_theatre(username):
 def hall_details(hall_name,username):
     hall = Hall_Details.query.filter_by(hall_name=hall_name).first_or_404()
     return render_template('hall_details.html', hall=hall,username=username)
+
+
+
+
+
+
 
 
 ############################### FRIENDS FEATURE ###########################

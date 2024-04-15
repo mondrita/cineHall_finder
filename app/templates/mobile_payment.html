@@ -34,21 +34,13 @@
 
 <div class="mobile-payment-container">
     <h2>Mobile Payment</h2>
+    <p>Movie Title: {{ movie_title }}</p>
     <p>Total Price: ${{ total_price }}</p>
-    <form action="{{ url_for('process_mobile_payment', movie_title=movie_title, username=username) }}" method="post">
-        <div class="form-item">
-            <input type="text" name="mobile_number" placeholder="Your Mobile Number" required>
-        </div>
-        <div class="form-item">
-            <input type="text" name="transaction_id" placeholder="Transaction ID" required>
-        </div>
-        <!-- Hidden inputs for passing movie details -->
-        <input type="hidden" name="movie_title" value="{{ movie_title }}">
-        <input type="hidden" name="total_price" value="{{ total_price }}">
-        <input type="hidden" name="movie_time" value="{{ movie_time }}">
-        
-        <button type="submit">Confirm Payment</button>
-    </form>
-    <p>Please enter your mobile number and the transaction ID you received after making the payment via your mobile banking app.</p>
+    <p>Format: {{ format }}</p>
+    <p>Showtime: {{ movie_time }}</p>
+    <p>Date: {{ date }}</p>
+    <input type="text" name="mobile_number" placeholder="Mobile Number" required><br>
+    <input type="text" name="transaction_id" placeholder="Transaction ID" required><br>
+    <button type="button" onclick="alert('Payment processing is not set up yet.');">Confirm Payment</button>
 </div>
 {% endblock %}
