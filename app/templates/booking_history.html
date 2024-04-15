@@ -16,14 +16,21 @@
         transition: transform 0.5s ease;
     }
     .movie-info {
-        text-align: center;
         position: absolute;
         bottom: 0;
-        background: rgba(162, 138, 168, 0.8);
+        background: rgba(162, 138, 168, 0.8); /* Semi-transparent background */
         color: white;
-        width: 120%;
+        width: 100%; /* Set width to 100% of parent */
+        height: 100%; /* Set height to match the image for full coverage */
         transform: translateY(100%);
         transition: transform 0.5s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px; /* Padding for text inside */
+        box-sizing: border-box; /* Include padding in width and height */
+        text-align: center; /* Center text horizontally */
     }
     .movie-card:hover .movie-image {
         transform: translateY(-100%);
