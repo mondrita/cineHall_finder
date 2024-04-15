@@ -1,6 +1,6 @@
 from app import app, db
 from flask import render_template, request, redirect, url_for,flash,session,jsonify
-from app.models import User, Movie_Data, Wishlist, UserPreferences, RatingReview, hall, Friendship,Hall_Details, Seat, SoldTicket
+from app.models import User, Movie_Data, Wishlist, UserPreferences, RatingReview, hall, Friendship,Hall_Details, Seat, SoldTicket, Voucher, user_vouchers
 from sqlalchemy.sql import text,or_,func
 from math import ceil 
 from googleapiclient.discovery import build
@@ -472,6 +472,12 @@ def card_payment(movie_title, username):
         db.session.add(new_ticket)
         db.session.commit()
 
+        # Add 500 points to the user's account
+        current_user = User.query.filter_by(username=username).first()
+        if current_user:
+            current_user.points += 500
+            db.session.commit()
+
         # Redirect to a success page or render a success message
         return render_template('payment_successful.html', username=username)
 
@@ -507,6 +513,12 @@ def mobile_payment(movie_title, username):
         db.session.add(new_ticket)
         db.session.commit()
 
+        # Add 500 points to the user's account
+        current_user = User.query.filter_by(username=username).first()
+        if current_user:
+            current_user.points += 500
+            db.session.commit()
+
         # Redirect to a success page or render a success message
         return render_template('payment_successful.html', username=username)
     
@@ -529,6 +541,44 @@ def booking_history(username):
     # Fetch all sold tickets for the given username and join with the hall table to get movie details
     bookings = db.session.query(SoldTicket, hall).join(hall, hall.Movie_Title == SoldTicket.movie_title).filter(SoldTicket.username == username).all()
     return render_template('booking_history.html', bookings=bookings,username=username)
+
+@app.route('/redeem_points', methods=['GET'])
+def redeem_points():
+    # Retrieve current user's username from session
+    current_username = session.get('username')
+
+    if current_username:
+        # Retrieve user from database
+        user = User.query.filter_by(username=current_username).first()
+
+        # Check if user points are None and update to 0
+        if user.points is None:
+            user.points = 0
+            db.session.commit()
+
+        user_points = user.points
+
+        bronze_threshold = 5000
+        silver_threshold = 10000
+        gold_threshold = 15000
+        platinum_threshold = 20000
+
+        voucher = None
+
+        if user_points >= platinum_threshold:
+            voucher = 'Platinum'
+        elif user_points >= gold_threshold:
+            voucher = 'Gold'
+        elif user_points >= silver_threshold:
+            voucher = 'Silver'
+        elif user_points >= bronze_threshold:
+            voucher = 'Bronze'
+
+        return render_template('redeem_points.html', points=user_points, voucher=voucher)
+    else:
+        flash('User not logged in!', 'error')
+        return redirect(url_for('login'))
+
 
 
 
