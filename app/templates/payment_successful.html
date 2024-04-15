@@ -1,0 +1,18 @@
+{% extends "base1.html" %}
+
+{% block content %}
+<div class="full-screen-container" style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f0f0; position: relative;">
+    <div class="content-container" style="text-align: center; background-color: #c3afd4; max-width: 700px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; position: absolute; top: 40%;">
+        <h1>Payment is Successful!</h1>
+        
+        <!-- Buttons Container -->
+        <div style="margin-top: 30px;">
+            <!-- Return to Dashboard Button -->
+            <a href="{{ url_for('dashboard', username=username) }}" style="text-decoration: none; color: white; background-color: #392f55; padding: 10px 20px; margin-right: 10px; border-radius: 5px;">Return to Dashboard</a>
+            
+            <!-- Buy More Tickets Button -->
+            <a href="{{ url_for('buy_tickets', movie_title=movie_title, username=username) }}" style="text-decoration: none; color: white; background-color: #5b506b; padding: 10px 20px; border-radius: 5px;">Buy More Tickets</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
