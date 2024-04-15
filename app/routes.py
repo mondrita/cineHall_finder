@@ -625,5 +625,25 @@ def remove_friend(friend_id):
     return redirect(url_for('view_friends'))
 
 
+@app.route('/confirm_refund/<int:ticket_id>')
+def confirm_refund(ticket_id):
+    ticket = SoldTicket.query.get_or_404(ticket_id)
+    movie = hall.query.filter_by(Movie_Title=ticket.movie_title).first()
+    if not movie:
+        abort(404)
+    return render_template('confirm_refund.html', ticket=ticket, movie=movie)
+
+@app.route('/process_refund/<int:ticket_id>', methods=['POST'])
+def process_refund(ticket_id):
+    ticket = SoldTicket.query.get_or_404(ticket_id)
+    reason = request.form['reason']  # Retrieve the cancellation reason from the form
+    # Log the reason or perform additional actions based on the reason here
+
+    db.session.delete(ticket)
+    db.session.commit()
+    flash(f'Ticket refunded successfully. Reason: {reason}', 'success')
+    return redirect(url_for('booking_history', username=session['username']))
+
+
 
 
