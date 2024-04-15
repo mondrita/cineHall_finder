@@ -24,12 +24,22 @@ class Friendship(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     friend_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
+user_vouchers = db.Table('user_vouchers',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('voucher_id', db.Integer, db.ForeignKey('voucher.id'), primary_key=True),
+    db.Column('redeemed_on', db.DateTime, default=datetime.utcnow)  # Optional: track when the voucher was redeemed
+)
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
     security_answer = db.Column(db.String(255), nullable=False)
+    points = db.Column(db.Integer, default=0, nullable=False)
+
+    vouchers = db.relationship('Voucher', secondary=user_vouchers,
+                               backref=db.backref('users', lazy='dynamic'))
 
     friends = relationship(
         'User',
@@ -183,3 +193,17 @@ class SoldTicket(db.Model):
 
     def __repr__(self):
         return f"<SoldTicket(username='{self.username}', movie_title='{self.movie_title}', date='{self.date}', time='{self.time}', format='{self.format}', ticket_price='{self.ticket_price}')>"
+
+
+class Voucher(db.Model):
+    __tablename__ = 'voucher'
+    id = db.Column(db.Integer, primary_key=True)
+    type = db.Column(db.String(50), nullable=False)  # Bronze, Silver, Gold, Platinum
+    discount = db.Column(db.Integer, nullable=False)  # Discount percentage
+    points_cost = db.Column(db.Integer, nullable=False)  # Cost in points
+
+    def __repr__(self):
+        return f'<Voucher {self.type} - {self.discount}% off>'
+
+
+
