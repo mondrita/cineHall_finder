@@ -1,0 +1,58 @@
+{% extends "base1.html" %}
+
+{% block content %}
+<style>
+    .payment-options-container {
+        text-align: center;
+        margin: 20px auto;
+        background-color: #c3afd4;
+        max-width: 700px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+    .payment-option {
+        padding: 20px;
+        margin: 10px 0;
+        border: 2px solid #a28ba9;
+        border-radius: 5px;
+        background-color: #e6d4e6;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .payment-option:hover {
+        background-color: #d1bcd2;
+    }
+</style>
+
+<div class="payment-options-container">
+    <h2>Select Payment Method</h2>
+    <div onclick="redirectToCardPayment()" class="payment-option">Pay via Card</div>
+    <div onclick="redirectToMobilePayment()" class="payment-option">Pay via Mobile Banking</div>
+
+</div>
+
+<script>
+function redirectToCardPayment() {
+    var baseUrl = "{{ url_for('card_payment', movie_title=movie_title, username=username) }}";
+    var queryParams = "?selected_seat=" + encodeURIComponent("{{ selected_seat }}") +
+                      "&format=" + encodeURIComponent("{{ format }}") +
+                      "&time=" + encodeURIComponent("{{ time }}") +
+                      "&date=" + encodeURIComponent("{{ date }}");
+    window.location.href = baseUrl + queryParams;
+}
+</script>
+
+<script>
+    function redirectToMobilePayment() {
+        var baseUrl = "{{ url_for('mobile_payment', movie_title=movie_title, username=username) }}";
+        var queryParams = "?selected_seat=" + encodeURIComponent("{{ selected_seat }}") +
+                          "&format=" + encodeURIComponent("{{ format }}") +
+                          "&time=" + encodeURIComponent("{{ time }}") +
+                          "&date=" + encodeURIComponent("{{ date }}");
+        window.location.href = baseUrl + queryParams;
+    }
+</script>
+    
+
+{% endblock %}
