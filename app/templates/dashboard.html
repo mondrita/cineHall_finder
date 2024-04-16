@@ -145,7 +145,7 @@
             <p><strong>Email:</strong> {{ user.email }}</p><br>
             <a href="{{ url_for('add_friend') }}" class="menu-button">Add Friend</a>
             <a href="{{ url_for('view_friends') }}" class="menu-button">View Friendlist</a>
-            <a href="{{ url_for('redeem_points') }}" class="menu-button">Redeem Points</a>
+            <a href="{{ url_for('redeem_points',username=username) }}" class="menu-button">Redeem Points</a>
         </div>
 
         <!-- Upcoming movies -->

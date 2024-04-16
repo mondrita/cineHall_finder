@@ -561,8 +561,8 @@ def booking_history(username):
     return render_template('booking_history.html', bookings=bookings, username=username, datetime=datetime)
 
 
-@app.route('/redeem_points', methods=['GET'])
-def redeem_points():
+@app.route('/redeem_points/<username>', methods=['GET'])
+def redeem_points(username):
     # Retrieve current user's username from session
     current_username = session.get('username')
 
@@ -594,7 +594,7 @@ def redeem_points():
         elif user_points >= bronze_threshold:
             voucher = 'Bronze'
 
-        return render_template('redeem_points.html', points=user_points, voucher=voucher,top_users=top_users)
+        return render_template('redeem_points.html', points=user_points, voucher=voucher,top_users=top_users,username=username)
     else:
         flash('User not logged in!', 'error')
         return redirect(url_for('login'))
