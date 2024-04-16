@@ -541,12 +541,25 @@ def hall_details(hall_name,username):
     hall = Hall_Details.query.filter_by(hall_name=hall_name).first_or_404()
     return render_template('hall_details.html', hall=hall,username=username)
 
+from datetime import datetime, timedelta
+
+from datetime import datetime
 
 @app.route('/booking_history/<username>')
 def booking_history(username):
     # Fetch all sold tickets for the given username and join with the hall table to get movie details
     bookings = db.session.query(SoldTicket, hall).join(hall, hall.Movie_Title == SoldTicket.movie_title).filter(SoldTicket.username == username).all()
-    return render_template('booking_history.html', bookings=bookings,username=username)
+    
+    refund_period = 3 
+    
+    # Calculate the refund deadline for each ticket
+    for ticket, _ in bookings:
+        movie_date = ticket.date
+        refund_deadline = movie_date - timedelta(days=refund_period)
+        ticket.refund_deadline = refund_deadline
+    
+    return render_template('booking_history.html', bookings=bookings, username=username, datetime=datetime)
+
 
 @app.route('/redeem_points', methods=['GET'])
 def redeem_points():
