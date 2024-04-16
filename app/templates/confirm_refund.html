@@ -112,7 +112,7 @@
                 <li>Date: {{ ticket.date.strftime('%Y-%m-%d') }}</li>
                 <li>Time: {{ ticket.time }}</li>
                 <li>Format: {{ ticket.format }}</li>
-                <li>Ticket Price: ${{ ticket.ticket_price }}</li>
+                <li>Ticket Price: Tk.{{ ticket.ticket_price }}</li>
             </ul>
         </div>
         <form action="{{ url_for('process_refund', ticket_id=ticket.id) }}" method="post">

@@ -32,7 +32,7 @@
     <form action="{{ url_for('card_payment', movie_title=movie_title, username=username) }}" method="post">
         <h2>Card Payment</h2>
         <p>Movie Title: {{ movie_title }}</p>
-        <p>Total Price: ${{ total_price }}</p>
+        <p>Total Price: Tk.{{ total_price }}</p>
         <p>Format: {{ format }}</p>
         <p>Showtime: {{ time }}</p>
         <p>Date: {{ date }}</p>
