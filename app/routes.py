@@ -1,5 +1,5 @@
 from app import app, db
-from flask import render_template, request, redirect, url_for,flash,session,jsonify
+from flask import render_template, request, redirect, url_for,flash,session,jsonify,abort
 from app.models import User, Movie_Data, Wishlist, UserPreferences, RatingReview, hall, Friendship,Hall_Details, Seat, SoldTicket, Voucher, user_vouchers
 from sqlalchemy.sql import text,or_,func
 from math import ceil 
@@ -478,6 +478,12 @@ def card_payment(movie_title, username):
             current_user.points += 500
             db.session.commit()
 
+        # Add 500 points to the user's account
+        current_user = User.query.filter_by(username=username).first()
+        if current_user:
+            current_user.points += 500
+            db.session.commit()
+
         # Redirect to a success page or render a success message
         return render_template('payment_successful.html', username=username)
 
@@ -557,6 +563,7 @@ def redeem_points():
             db.session.commit()
 
         user_points = user.points
+        top_users = User.query.order_by(User.points.desc()).limit(5).all()
 
         bronze_threshold = 5000
         silver_threshold = 10000
@@ -574,7 +581,7 @@ def redeem_points():
         elif user_points >= bronze_threshold:
             voucher = 'Bronze'
 
-        return render_template('redeem_points.html', points=user_points, voucher=voucher)
+        return render_template('redeem_points.html', points=user_points, voucher=voucher,top_users=top_users)
     else:
         flash('User not logged in!', 'error')
         return redirect(url_for('login'))
@@ -689,11 +696,18 @@ def process_refund(ticket_id):
     reason = request.form['reason']  # Retrieve the cancellation reason from the form
     # Log the reason or perform additional actions based on the reason here
 
+    # Decrease user points by 500 when a ticket is refunded
+    current_username = session.get('username')
+    if current_username:
+        user = User.query.filter_by(username=current_username).first()
+        if user.points is not None:
+            user.points -= 500
+            db.session.commit()
+
     db.session.delete(ticket)
     db.session.commit()
-    flash(f'Ticket refunded successfully. Reason: {reason}', 'success')
-    return redirect(url_for('booking_history', username=session['username']))
-
+    flash(f'Ticket refunded successfully. Reason: {reason}. Your points decreased by 500.', 'success')
+    return redirect(url_for('booking_history', username=current_username))
 
 
 

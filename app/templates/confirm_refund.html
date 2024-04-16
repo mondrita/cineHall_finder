@@ -2,93 +2,174 @@
 
 {% block content %}
 <style>
-    .container {
-        width: 60%;
-        margin: auto;
-        padding: 20px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        border-radius: 8px;
-        background: white;
-    }
-    .reasons-container {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-    .reason-container {
-        background-color: rgba(162, 138, 168, 0.8); /* Light purple background */
-        padding: 10px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-    }
-    .form-group {
-        margin: 20px 0;
-    }
-    .form-label {
-        margin-bottom: 10px;
-        font-weight: bold;
-        display: block; /* Ensure label appears on a new line */
-        color: #333; /* Color for the non-container label */
-    }
-    label {
-        margin: 0; /* Adjust label margin for better alignment */
-        display: flex;
-        align-items: center;
-        color: white; /* Set text color to white for labels inside the container */
-    }
-    input[type="radio"] {
-        margin-right: 10px; /* Space between radio button and label text */
-    }
-    .btn {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-top: 10px;
-    }
-    .btn-danger {
-        background-color: #6f608d;
-        color: white;
-    }
-    .btn-secondary {
-        background-color: #ccc;
-        color: white;
-    }
+        .container {
+            width: 60%;
+            margin: auto;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            background: white;
+        }
+        /* Additional CSS styles for the receipt-like box */
+        .receipt-box {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .receipt-box h1 {
+            font-size: 24px;
+            margin-top: 0;
+        }
+        .receipt-box ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .receipt-box ul li {
+            margin-bottom: 10px;
+        }
+        .reasons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .reason-container {
+            background-color: rgba(162, 138, 168, 0.8); /* Light purple background */
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+        }
+        .form-group {
+            margin: 20px 0;
+        }
+        .form-label {
+            margin-bottom: 10px;
+            font-weight: bold;
+            display: block; /* Ensure label appears on a new line */
+            color: #333; /* Color for the non-container label */
+        }
+        label {
+            margin: 0; /* Adjust label margin for better alignment */
+            display: flex;
+            align-items: center;
+            color: white; /* Set text color to white for labels inside the container */
+        }
+        input[type="radio"] {
+            margin-right: 10px; /* Space between radio button and label text */
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-danger {
+            background-color: #6f608d;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #ccc;
+            color: white;
+        }
+        /* Style for the contact info box */
+        .info-box {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            z-index: 9999;
+        }
+        .info-box h2 {
+            font-size: 20px;
+            margin-top: 0;
+        }
+        .info-box p {
+            margin-bottom: 10px;
+        }
+        .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+        }
 </style>
-<div class="container">
-    <h1>Confirm Refund</h1>
-    <p>Are you sure you want to cancel and refund the following booking?</p>
-    <ul>
-        <li>Movie: {{ movie.Movie_Title }}</li>
-        <li>Date: {{ ticket.date.strftime('%Y-%m-%d') }}</li>
-        <li>Time: {{ ticket.time }}</li>
-        <li>Format: {{ ticket.format }}</li>
-        <li>Ticket Price: ${{ ticket.ticket_price }}</li>
-    </ul>
-    <form action="{{ url_for('process_refund', ticket_id=ticket.id) }}" method="post">
-        <div class="form-group">
-            <span class="form-label">Reason for cancellation:</span>
-            <div class="reasons-container">
-                <div class="reason-container">
-                    <label><input type="radio" name="reason" value="Not interested" checked> Not interested</label>
-                </div>
-                <div class="reason-container">
-                    <label><input type="radio" name="reason" value="Time clash"> Time clash</label>
-                </div>
-                <div class="reason-container">
-                    <label><input type="radio" name="reason" value="Found a better option"> Found a better option</label>
-                </div>
-                <div class="reason-container">
-                    <label><input type="radio" name="reason" value="Event rescheduled"> Event rescheduled</label>
-                </div>
-                <div class="reason-container">
-                    <label><input type="radio" name="reason" value="Other commitments"> Other commitments</label>
+
+    <div class="container">
+        <h1>Confirm Refund</h1>
+        <p>Are you sure you want to cancel and refund the following booking?</p>
+        <div class="receipt-box">
+            <h1>Booking Information</h1>
+            <ul>
+                <li>Movie: {{ movie.Movie_Title }}</li>
+                <li>Date: {{ ticket.date.strftime('%Y-%m-%d') }}</li>
+                <li>Time: {{ ticket.time }}</li>
+                <li>Format: {{ ticket.format }}</li>
+                <li>Ticket Price: ${{ ticket.ticket_price }}</li>
+            </ul>
+        </div>
+        <form action="{{ url_for('process_refund', ticket_id=ticket.id) }}" method="post">
+            <div class="form-group">
+                <span class="form-label">Reason for cancellation:</span>
+                <div class="reasons-container">
+                    <div class="reason-container">
+                        <label><input type="radio" name="reason" value="Not interested" checked> Not interested</label>
+                    </div>
+                    <div class="reason-container">
+                        <label><input type="radio" name="reason" value="Time clash"> Time clash</label>
+                    </div>
+                    <div class="reason-container">
+                        <label><input type="radio" name="reason" value="Found a better option"> Found a better option</label>
+                    </div>
+                    <div class="reason-container">
+                        <label><input type="radio" name="reason" value="Event rescheduled"> Event rescheduled</label>
+                    </div>
+                    <div class="reason-container">
+                        <label><input type="radio" name="reason" value="Other commitments"> Other commitments</label>
+                    </div>
+                    <div class="reason-container">
+                        <label><input type="radio" name="reason" value="Contact us"> Didn't find your reason here? <a href="#" id="contact-link">Contact us</a></label>
+                    </div>
                 </div>
             </div>
-        </div>
-        <button type="submit" class="btn btn-danger">Confirm Refund</button>
-        <a href="{{ url_for('booking_history', username=session['username']) }}" class="btn btn-secondary">Cancel</a>
-    </form>
-</div>
+            <button type="submit" class="btn btn-danger">Confirm Refund</button>
+            <a href="{{ url_for('booking_history', username=session['username']) }}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+
+    <!-- Info box for contact details -->
+    <div class="info-box" id="info-box">
+        <span class="close-btn" onclick="closeInfoBox()">X</span>
+        <h2>Contact Us</h2>
+        <p>Email: cinehalladmin1@gmail.com</p>
+        <p>Phone: +880123456789</p>
+    </div>
+
+    <script>
+        // Function to show the contact info box
+        function showInfoBox() {
+            var infoBox = document.getElementById('info-box');
+            infoBox.style.display = 'block';
+        }
+
+        // Function to close the contact info box
+        function closeInfoBox() {
+            var infoBox = document.getElementById('info-box');
+            infoBox.style.display = 'none';
+        }
+
+        // Event listener for clicking the contact link
+        document.getElementById('contact-link').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default link behavior
+            showInfoBox(); // Show the contact info box
+        });
+    </script>
+
 {% endblock %}
