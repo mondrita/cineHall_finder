@@ -782,3 +782,14 @@ def add_to_playlist():
     db.session.add(playlist_item)
     db.session.commit()
     return redirect(url_for('playlist_details', playlist_id=playlist_id))
+
+
+@app.route('/chat/<int:friend_id>')
+def chat(friend_id):
+    current_username = session.get('username')
+    if current_username:
+        friend = User.query.get_or_404(friend_id)
+        return render_template('chat.html', friend=friend, username=current_username)
+    else:
+        flash('Please log in to access the chat feature.', 'error')
+        return redirect(url_for('login'))
