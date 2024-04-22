@@ -42,6 +42,7 @@
             border-radius: 5px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
 
         .friend-list li:last-child {
@@ -52,8 +53,8 @@
             flex-grow: 1;
         }
 
-        .remove-button {
-            background-color: #f4c2b9; /* Red color */
+        .remove-button, .chat-button {
+            background-color: #f4c2b9;
             color: #fff;
             padding: 5px 10px;
             border: none;
@@ -62,16 +63,24 @@
             transition: background-color 0.3s ease;
         }
 
+        .chat-button {
+            background-color: #f4b2d8;
+        }
+
         .remove-button:hover {
-            background-color: #cc4125; /* Darker red color on hover */
+            background-color: #cc4125;
+        }
+
+        .chat-button:hover {
+            background-color: #d17ba5;
         }
 
         .dashboard-button {
             display: block;
-            margin: 20px auto 0; /* Center the button horizontally and add some space at the top */
+            margin: 20px auto 0;
             text-align: center;
             text-decoration: none;
-            background-color: #9875a5; /* Purple color */
+            background-color: #9875a5;
             color: #fff;
             padding: 10px 20px;
             border-radius: 5px;
@@ -79,7 +88,7 @@
         }
 
         .dashboard-button:hover {
-            background-color: #60527a; /* Darker purple color on hover */
+            background-color: #5d4095;
         }
 
         /* Dropdown styles */
@@ -156,6 +165,9 @@
                                 </div>
                             </div>
                         {% endif %}
+                        <form action="/chat/{{ friend.id }}" method="GET">
+                            <button class="chat-button" type="submit">Chat</button>
+                        </form>
                         <form action="/remove_friend/{{ friend.id }}" method="POST">
                             <button class="remove-button" type="submit">Remove</button>
                         </form>
