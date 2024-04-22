@@ -1,149 +1,167 @@
 {% extends 'base1.html' %}
 
 {% block content %}
-    <title>{{ movie.Title }} - Movie Details</title>
-    <style>
+<title>{{ movie.Title }} - Movie Details</title>
+<style>
 
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #c6b1cd;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+    .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #c6b1cd;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
 
-        .movie-details {
-            padding: 0;
-            margin: 0;
-        }
+    .movie-details {
+        padding: 0;
+        margin: 0;
+    }
 
-        .movie-item {
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-        }
+    .movie-item {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+    }
 
-        .movie-title {
-            font-weight: bold;
-            color: #333;
-        }
+    .movie-title {
+        font-weight: bold;
+        color: #333;
+    }
 
-        .movie-info {
-            margin-bottom: 10px;
-            text-align: left;
-        }
+    .movie-info {
+        margin-bottom: 10px;
+        text-align: left;
+    }
 
-        .movie-info strong {
-            font-weight: bold;
-            color: #622A77;
-        }
+    .movie-info strong {
+        font-weight: bold;
+        color: #622A77;
+    }
 
-        .trailer {
-            margin-bottom: 20px;
-        }
+    .trailer {
+        margin-bottom: 20px;
+    }
 
-        .rating-review-btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #622A77;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-            margin-top: 20px; /* Add space above button */
-        }
+    .rating-review-btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #622A77;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        margin-top: 20px; /* Add space above button */
+    }
 
-        .rating-review-btn:hover {
-            background-color: #49195b;
-        }
+    .rating-review-btn:hover {
+        background-color: #49195b;
+    }
 
-    </style>
+    /* Styling for Add to Playlist form */
+    .add-to-playlist-container {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .add-to-playlist-form {
+        display: inline-block;
+    }
+
+    .playlist-select-container {
+        margin-right: 10px;
+    }
+
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>{{ movie.Title }}</h1>
-        {% if trailer_video_id %}
-        <div class="trailer">
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ trailer_video_id }}" frameborder="0" allowfullscreen></iframe>
-        </div>
-        {% else %}
-        <p>No trailer available.</p>
-        {% endif %}
-        <ul class="movie-details">
-            <li class="movie-item">
-                <div class="movie-info">
-                    <strong>Genre:</strong> {{ movie.Genre }}
-                </div>
-                <div class="movie-info">
-                    <strong>Description:</strong> {{ movie.Description }}
-                </div>
-                <div class="movie-info">
-                    <strong>Director:</strong> {{ movie.Director }}
-                </div>
-                <div class="movie-info">
-                    <strong>Actors:</strong> {{ movie.Actors }}
-                </div>
-                <div class="movie-info">
-                    <strong>Year:</strong> {{ movie.Year }}
-                </div>
-                <div class="movie-info">
-                    <strong>Runtime:</strong> {{ movie.Runtime }}
-                </div>
-                <div class="movie-info">
-                    <strong>Rating:</strong> {{ "%0.1f"|format(movie.Rating) }}
-                </div>
-                <div class="movie-info">
-                    <strong>Votes:</strong> {{ movie.Votes }}
-                </div>
-                <div class="movie-info">
-                    <strong>Revenue:</strong> {{ movie.Revenue }}
-                </div>
-                <div class="movie-info">
-                    <strong>Metascore:</strong> {{ movie.Metascore }}
-                </div>
-            </li>
-        </ul>
-        <form action="{{ url_for('add_to_wishlist') }}" method="POST">
-            <input type="hidden" name="Rank" value="{{ movie.Rank }}">
-            <input type="hidden" name="user_id" value="{{ user_id }}">
-            <button type="submit" class="rating-review-btn">Add to Watchlist</button>
-        </form>
+<div class="container">
+    <h1>{{ movie.Title }}</h1>
+    {% if trailer_video_id %}
+    <div class="trailer">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ trailer_video_id }}" frameborder="0" allowfullscreen></iframe>
+    </div>
+    {% else %}
+    <p>No trailer available.</p>
+    {% endif %}
+    <ul class="movie-details">
+        <li class="movie-item">
+            <div class="movie-info">
+                <strong>Genre:</strong> {{ movie.Genre }}
+            </div>
+            <div class="movie-info">
+                <strong>Description:</strong> {{ movie.Description }}
+            </div>
+            <div class="movie-info">
+                <strong>Director:</strong> {{ movie.Director }}
+            </div>
+            <div class="movie-info">
+                <strong>Actors:</strong> {{ movie.Actors }}
+            </div>
+            <div class="movie-info">
+                <strong>Year:</strong> {{ movie.Year }}
+            </div>
+            <div class="movie-info">
+                <strong>Runtime:</strong> {{ movie.Runtime }}
+            </div>
+            <div class="movie-info">
+                <strong>Rating:</strong> {{ "%0.1f"|format(movie.Rating) }}
+            </div>
+            <div class="movie-info">
+                <strong>Votes:</strong> {{ movie.Votes }}
+            </div>
+            <div class="movie-info">
+                <strong>Revenue:</strong> {{ movie.Revenue }}
+            </div>
+            <div class="movie-info">
+                <strong>Metascore:</strong> {{ movie.Metascore }}
+            </div>
+        </li>
+    </ul>
+    <form action="{{ url_for('add_to_wishlist') }}" method="POST">
+        <input type="hidden" name="Rank" value="{{ movie.Rank }}">
+        <input type="hidden" name="user_id" value="{{ user_id }}">
+        <button type="submit" class="rating-review-btn">Add to Watchlist</button>
+    </form>
 
-        <!-- Form to add to playlist -->
-        <form action="{{ url_for('add_to_playlist') }}" method="POST">
+    <!-- Add to Playlist Form -->
+    <div class="add-to-playlist-container">
+        <form action="{{ url_for('add_to_playlist') }}" method="POST" class="add-to-playlist-form">
             <input type="hidden" name="Rank" value="{{ movie.Rank }}">
             <label for="playlist_id">Add to Playlist:</label>
-            <select name="playlist_id">
-                {% for playlist in playlists %}
-                    <option value="{{ playlist.id }}">{{ playlist.name }}</option>
-                {% endfor %}
-            </select>
+            <div class="playlist-select-container">
+                <select name="playlist_id">
+                    {% for playlist in playlists %}
+                        <option value="{{ playlist.id }}">{{ playlist.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <!-- Add the movie_rank input field here -->
             <input type="hidden" name="movie_rank" value="{{ movie.Rank }}">
             <button type="submit" class="rating-review-btn">Add to Playlist</button>
         </form>
-
-        <a href="/movie/{{ movie.Rank }}/rate_review?username={{ username }}" class="rating-review-btn">Rate and Review this Movie</a>
-
-        <div class="ratings-reviews">
-            <h2>Ratings and Reviews</h2>
-            {% if ratings_reviews %}
-                {% for rating_review in ratings_reviews %}
-                    <div class="rating-review">
-                        <p><strong>Rating:</strong> {{ rating_review.rating }}</p>
-                        <p><strong>Review:</strong> {{ rating_review.review }}</p>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p>No ratings and reviews yet.</p>
-            {% endif %}
-        </div>
     </div>
+
+    <a href="/movie/{{ movie.Rank }}/rate_review?username={{ username }}" class="rating-review-btn">Rate and Review this Movie</a>
+
+    <div class="ratings-reviews">
+        <h2>Ratings and Reviews</h2>
+        {% if ratings_reviews %}
+            {% for rating_review in ratings_reviews %}
+                <div class="rating-review">
+                    <p><strong>Rating:</strong> {{ rating_review.rating }}</p>
+                    <p><strong>Review:</strong> {{ rating_review.review }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No ratings and reviews yet.</p>
+        {% endif %}
+    </div>
+</div>
 </body>
 {% endblock %}
