@@ -1,11 +1,23 @@
 {% extends 'base1.html' %}
 
 {% block content %}
-    <h1>{{ playlist.name }}</h1>
-    <ul>
-        {% for movie in movies %}
-            <li>{{ movie.Title }}</li>
-        {% endfor %}
-    </ul>
-
+<div class="full-screen-container" style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #c6b1cd;">
+    <div class="content-container" style="text-align: center; background-color: #9e87a5; width: 80%; max-width: 900px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 40px; border-radius: 10px;">
+        <h1 style="color: #392f55; margin-bottom: 20px;">{{ playlist.name }}</h1>
+        
+        <!-- Movies Container -->
+        <div style="margin-bottom: 30px;">
+            <ul style="list-style: none; padding: 0;">
+                {% for movie in movies %}
+                    <li style="margin-bottom: 20px; display: flex; justify-content: center;">
+                        <div style="background-color: #5b506b; padding: 10px; border-radius: 8px; text-align: center; width: 70%;">
+                            <h2 style="color: white; margin-bottom: 5px; font-size: 18px;">{{ movie.Title }}</h2>
+                            <p style="color: white; margin-bottom: 5px;">Year: {{ movie.Year }}</p>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
 {% endblock %}
