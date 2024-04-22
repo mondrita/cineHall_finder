@@ -47,6 +47,25 @@
         list-style-type: none;
         padding: 0;
     }
+
+    .button-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .redeem-button {
+        padding: 10px 20px;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .redeem-button:hover {
+        background-color: #0056b3;
+    }
 </style>
 
 <div class="container">
@@ -56,54 +75,75 @@
         <h2>Your Points: {{ points }}</h2>
     </div>
 
+    <!-- Redeem vouchers form -->
     <div class="voucher-list">
         <h3>Available Vouchers:</h3>
-        <ul>
-            <li class="voucher-item">
-                <span class="voucher-name">🥉Bronze (5000 points)</span>
-                {% if points >= 5000 %}
-                <span class="available">Available</span>
-                {% else %}
-                <span class="unavailable">Unavailable</span>
-                {% endif %}
-            </li>
-            <li class="voucher-item">
-                <span class="voucher-name">🥈Silver (10000 points)</span>
-                {% if points >= 10000 %}
-                <span class="available">Available</span>
-                {% else %}
-                <span class="unavailable">Unavailable</span>
-                {% endif %}
-            </li>
-            <li class="voucher-item">
-                <span class="voucher-name">🥇Gold (15000 points)</span>
-                {% if points >= 15000 %}
-                <span class="available">Available</span>
-                {% else %}
-                <span class="unavailable">Unavailable</span>
-                {% endif %}
-            </li>
-            <li class="voucher-item">
-                <span class="voucher-name">🎁Platinum (20000 points)</span>
-                {% if points >= 20000 %}
-                <span class="available">Available</span>
-                {% else %}
-                <span class="unavailable">Unavailable</span>
-                {% endif %}
-            </li>
-        </ul>
+        <form method="post">
+            <ul>
+                <li class="voucher-item">
+                    <span class="voucher-name">🔩Iron (1000 points)</span>
+                    {% if points >= 1000 %}
+                    <button type="submit" name="voucher_type" value="Iron">Redeem</button>
+                    {% else %}
+                    <span class="unavailable">Unavailable</span>
+                    {% endif %}
+                </li>
+                <li class="voucher-item">
+                    <span class="voucher-name">🥉Bronze (5000 points)</span>
+                    {% if points >= 5000 %}
+                    <button type="submit" name="voucher_type" value="Bronze">Redeem</button>
+                    {% else %}
+                    <span class="unavailable">Unavailable</span>
+                    {% endif %}
+                </li>
+                <li class="voucher-item">
+                    <span class="voucher-name">🥈Silver (10000 points)</span>
+                    {% if points >= 10000 %}
+                    <button type="submit" name="voucher_type" value="Silver">Redeem</button>
+                    {% else %}
+                    <span class="unavailable">Unavailable</span>
+                    {% endif %}
+                </li>
+                <li class="voucher-item">
+                    <span class="voucher-name">🥇Gold (15000 points)</span>
+                    {% if points >= 15000 %}
+                    <button type="submit" name="voucher_type" value="Gold">Redeem</button>
+                    {% else %}
+                    <span class="unavailable">Unavailable</span>
+                    {% endif %}
+                </li>
+                <li class="voucher-item">
+                    <span class="voucher-name">🎁Platinum (20000 points)</span>
+                    {% if points >= 20000 %}
+                    <button type="submit" name="voucher_type" value="Platinum">Redeem</button>
+                    {% else %}
+                    <span class="unavailable">Unavailable</span>
+                    {% endif %}
+                </li>
+            </ul>
+        </form>
     </div>
-</div>
 
-<div class="container">
-    <h1>🏆LEADERBOARD🏆</h1>
-    <div class="voucher-list">
-        <h3>Top 5 Users:</h3>
+    <!-- Leaderboard -->
+    <div class="container">
+        <h1>🏆LEADERBOARD🏆</h1>
+        <div class="voucher-list">
+            <h3>Top 5 Users:</h3>
+            <ul>
+                {% for user_index in range(5) %}
+                <li>{{ user_index + 1 }}. {{ top_users[user_index].username }} - Points: {{ top_users[user_index].points }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="redeemed-vouchers">
+        <h3>Redeemed Vouchers:</h3>
         <ul>
-            {% for user_index in range(5) %}
-            <li>{{ user_index + 1 }}. {{ top_users[user_index].username }} - Points: {{ top_users[user_index].points }}</li>
+            {% for voucher in redeemed_vouchers %}
+            <li>{{ voucher }}</li>
             {% endfor %}
         </ul>
     </div>
 </div>
+
 {% endblock %}

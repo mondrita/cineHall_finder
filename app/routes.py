@@ -1,7 +1,7 @@
 from app import app, db
 from flask import render_template, request, redirect, url_for,flash,session,jsonify,abort
 from app.models import User, Movie_Data, Wishlist, UserPreferences, RatingReview, hall, Friendship,Hall_Details, Seat, SoldTicket, Voucher, user_vouchers, Playlist, PlaylistItem
-from sqlalchemy.sql import text,or_,func
+from sqlalchemy.sql import text,or_,func,desc
 from math import ceil 
 from googleapiclient.discovery import build
 
@@ -439,8 +439,30 @@ def prepare_payment(movie_title, username):
     format = request.args.get('format')
     time = request.args.get('time')
     date = request.args.get('date')
-    ticket_price = request.args.get('ticket_price')
-    return render_template('prepare_payment.html', movie_title=movie_title, username=username, selected_seats=selected_seats, format=format, time=time, date=date, ticket_price=ticket_price)
+    original_price = float(request.args.get('ticket_price'))
+    ticket_price = float(request.args.get('ticket_price'))  # Convert ticket_price to float
+    discounted_price = ticket_price  # Default to ticket_price
+
+    # Retrieve user from database
+    current_user = User.query.filter_by(username=username).first()
+
+    # Check if user has vouchers
+    if current_user and current_user.vouchers:
+        highest_discount = 0
+        for voucher in current_user.vouchers:
+            if voucher.discount > highest_discount:
+                highest_discount = voucher.discount
+
+        discount_amount = ticket_price * (highest_discount / 100)
+        discounted_price = ticket_price - discount_amount
+
+    # Store discounted_price in session
+    session['discounted_price'] = discounted_price
+
+    return render_template('prepare_payment.html', movie_title=movie_title, username=username, 
+                           selected_seats=selected_seats, format=format, time=time, 
+                           date=date, ticket_price=discounted_price,original_price =original_price)
+
 
 @app.route('/card_payment/<movie_title>/<username>', methods=['GET', 'POST'])
 def card_payment(movie_title, username):
@@ -449,9 +471,10 @@ def card_payment(movie_title, username):
         format = request.args.get('format')
         time = request.args.get('time')
         date = request.args.get('date')
-        ticket_price = request.args.get('ticket_price')
+        discounted_price = session.get('discounted_price', request.args.get('ticket_price'))
+        
         return render_template('card_payment.html', movie_title=movie_title, username=username,
-                               total_price=ticket_price, time=time, selected_seats=selected_seats,
+                               total_price=discounted_price, time=time, selected_seats=selected_seats,
                                format=format, date=date)
     elif request.method == 'POST':
 
@@ -460,12 +483,17 @@ def card_payment(movie_title, username):
         format = request.form.get('format')
         time = request.form.get('time')
         date = request.form.get('date')
-        ticket_price = request.form.get('total_price')
+        
+        # Check for discounted price
+        discounted_price = request.form.get('discounted_price')
+        if discounted_price:
+            ticket_price = discounted_price
+        else:
+            ticket_price = request.form.get('total_price')
 
-        # Convert date and time from string to appropriate formats
+        # Convert date from string to appropriate format
         from datetime import datetime
         date = datetime.strptime(date, '%Y-%m-%d').date()
-        #time = datetime.strptime(time, '%H:%M').time()'''
 
         # Create and add sold ticket to the database
         new_ticket = SoldTicket(username=username, movie_title=movie_title,
@@ -479,28 +507,36 @@ def card_payment(movie_title, username):
             current_user.points += 500
             db.session.commit()
 
-        # Add 500 points to the user's account
-        current_user = User.query.filter_by(username=username).first()
-        if current_user:
-            current_user.points += 500
-            db.session.commit()
-
         # Redirect to a success page or render a success message
         return render_template('payment_successful.html', username=username)
+
+
 
 
 @app.route('/mobile_payment/<movie_title>/<username>', methods=['GET','POST'])
 def mobile_payment(movie_title, username):
     # Similar extraction as card_payment
     if request.method == 'GET':
+        # Check if there's a discounted price
+        discounted_price = request.form.get('discounted_price')
         selected_seats = request.args.get('selected_seats')
         format = request.args.get('format')
         time = request.args.get('time')
         date = request.args.get('date')
         ticket_price = request.args.get('ticket_price')
-        return render_template('mobile_payment.html', movie_title=movie_title, username=username,
+        if discounted_price:
+            return render_template('mobile_payment.html', movie_title=movie_title, username=username,
+                            total_price=discounted_price, movie_time=time, selected_seats=selected_seats,format=format,date=date)
+        else:
+            return render_template('mobile_payment.html', movie_title=movie_title, username=username,
                             total_price=ticket_price, movie_time=time, selected_seats=selected_seats,format=format,date=date)
     elif request.method == 'POST':
+
+        # Check if there's a discounted price
+        discounted_price = request.form.get('discounted_price')
+        if discounted_price:
+            ticket_price = discounted_price
+
 
         # Fetch data from form or use what was passed from the GET request
         selected_seats = request.form.get('selected_seats')
@@ -562,7 +598,7 @@ def booking_history(username):
     return render_template('booking_history.html', bookings=bookings, username=username, datetime=datetime)
 
 
-@app.route('/redeem_points/<username>', methods=['GET'])
+@app.route('/redeem_points/<username>', methods=['GET', 'POST'])
 def redeem_points(username):
     # Retrieve current user's username from session
     current_username = session.get('username')
@@ -579,26 +615,57 @@ def redeem_points(username):
         user_points = user.points
         top_users = User.query.order_by(User.points.desc()).limit(5).all()
 
+        iron_threshold = 1000
         bronze_threshold = 5000
         silver_threshold = 10000
         gold_threshold = 15000
         platinum_threshold = 20000
 
-        voucher = None
+        voucher_redeemed = None
 
-        if user_points >= platinum_threshold:
-            voucher = 'Platinum'
-        elif user_points >= gold_threshold:
-            voucher = 'Gold'
-        elif user_points >= silver_threshold:
-            voucher = 'Silver'
-        elif user_points >= bronze_threshold:
-            voucher = 'Bronze'
+        if request.method == 'POST':
+            voucher_type = request.form.get('voucher_type')
 
-        return render_template('redeem_points.html', points=user_points, voucher=voucher,top_users=top_users,username=username)
+            redeemed_vouchers = [voucher.type for voucher in user.vouchers]
+
+            if voucher_type == 'Platinum' and user_points >= platinum_threshold and 'Platinum' not in redeemed_vouchers:
+                user.points -= platinum_threshold
+                voucher_redeemed = 'Platinum'
+            elif voucher_type == 'Gold' and user_points >= gold_threshold and 'Gold' not in redeemed_vouchers:
+                user.points -= gold_threshold
+                voucher_redeemed = 'Gold'
+            elif voucher_type == 'Silver' and user_points >= silver_threshold and 'Silver' not in redeemed_vouchers:
+                user.points -= silver_threshold
+                voucher_redeemed = 'Silver'
+            elif voucher_type == 'Bronze' and user_points >= bronze_threshold and 'Bronze' not in redeemed_vouchers:
+                user.points -= bronze_threshold
+                voucher_redeemed = 'Bronze'
+            elif voucher_type == 'Iron' and user_points >= iron_threshold and 'Iron' not in redeemed_vouchers:
+                user.points -= iron_threshold
+                voucher_redeemed = 'Iron'
+            
+            # Add redeemed voucher to user_vouchers table
+            if voucher_redeemed:
+                voucher = Voucher.query.filter_by(type=voucher_redeemed).first()
+                if voucher:
+                    user.vouchers.append(voucher)
+                    db.session.commit()
+
+        redeemed_vouchers = [voucher.type for voucher in user.vouchers]
+
+        # Update session with the new user points
+        session['user_points'] = user.points
+
+        return render_template('redeem_points.html', points=user.points, voucher_redeemed=voucher_redeemed, top_users=top_users, redeemed_vouchers=redeemed_vouchers, username=username)
     else:
         flash('User not logged in!', 'error')
         return redirect(url_for('login'))
+
+
+
+
+
+
 
 
 
