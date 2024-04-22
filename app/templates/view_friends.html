@@ -81,6 +81,56 @@
         .dashboard-button:hover {
             background-color: #5d4095; /* Darker purple color on hover */
         }
+
+        /* Dropdown styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 5px;
+            padding: 5px 10px;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-button {
+            background-color: #98eaba;
+            color: white;
+            padding: 5px 10px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .dropdown-button:hover {
+            background-color: #6ec172;
+        }
+        .book-button {
+            background-color: #a9c9ea;
+            color: white;
+            padding: 8px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .book-button:hover {
+            background-color: #6e8bb6;
+        }
     </style>
 </head>
 <body>
@@ -93,6 +143,19 @@
                 {% for friend in friends %}
                     <li>
                         <span class="friend-name">🤵{{ friend.username }}</span>
+                        {% if friend in friend_movies %}
+                            <div class="dropdown">
+                                <button class="dropdown-button">Booked Movies</button>
+                                <div class="dropdown-content">
+                                    {% for ticket in friend_movies[friend] %}
+                                        <p>{{ ticket.movie_title }} - {{ ticket.date }} </p>
+                                        <form action="/buy_tickets/{{ ticket.movie_title }}/{{ session.get('username') }}" method="POST">
+                                            <button class="book-button" type="submit">Book Movie</button>
+                                        </form>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
                         <form action="/remove_friend/{{ friend.id }}" method="POST">
                             <button class="remove-button" type="submit">Remove</button>
                         </form>

@@ -81,7 +81,7 @@ def dashboard(username):
     if user:
         user_info = {'username': user.username, 'email': user.email}
         # Fetch upcoming movies
-        query = text("SELECT Title, Description FROM Movie_Data WHERE Year = 2024 LIMIT 5")
+        query = text("SELECT Title, Description, Rank FROM Movie_Data WHERE Year = 2024 LIMIT 5")
         result = db.session.execute(query)
         upcoming_movies = result.fetchall()
         # Fetch user preferences
@@ -660,14 +660,27 @@ def view_friends():
         if current_user:
             # Get the list of added friends for the current user
             friends = current_user.friends
-            return render_template('view_friends.html', friends=friends)
+            
+            # Dictionary to store movies booked by each friend
+            friend_movies = {}
+            
+            # Loop through each friend to fetch their booked movies
+            for friend in friends:
+                friend_sold_tickets = SoldTicket.query.filter_by(username=friend.username).all()
+                future_movies = []
+                for ticket in friend_sold_tickets:
+                    if ticket.date >= datetime.now().date():
+                        future_movies.append(ticket)
+                friend_movies[friend] = future_movies
+
+            return render_template('view_friends.html', friends=friends, friend_movies=friend_movies)
         else:
             flash('User not found!', 'error')
             return redirect(url_for('login'))
     else:
         flash('User not logged in!', 'error')
         return redirect(url_for('login'))
-
+    
 from flask import redirect, url_for
 
 @app.route('/remove_friend/<int:friend_id>', methods=['POST'])

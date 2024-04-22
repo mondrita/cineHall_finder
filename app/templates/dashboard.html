@@ -157,7 +157,7 @@
                     <div class="movie-box">
                         <p>{{ movie[0] }}</p> <!-- Display movie title -->
                         <div class="movie-description">{{ movie[1] }}</div> <!-- Movie description -->
-                        <a href="{{ url_for('movie_page', Rank=movie.Rank, username=username) }}" class="view-details-btn">View details</a>
+                        <a href="{{ url_for('movie_page', Rank=movie[2], username=username) }}" class="view-details-btn">View details</a>
                     </div>
                 {% endfor %}
             </div>
