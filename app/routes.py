@@ -1,6 +1,6 @@
 from app import app, db
 from flask import render_template, request, redirect, url_for,flash,session,jsonify,abort
-from app.models import User, Movie_Data, Wishlist, UserPreferences, RatingReview, hall, Friendship,Hall_Details, Seat, SoldTicket, Voucher, user_vouchers
+from app.models import User, Movie_Data, Wishlist, UserPreferences, RatingReview, hall, Friendship,Hall_Details, Seat, SoldTicket, Voucher, user_vouchers, Playlist, PlaylistItem
 from sqlalchemy.sql import text,or_,func
 from math import ceil 
 from googleapiclient.discovery import build
@@ -192,7 +192,8 @@ def movie_page(Rank,username):
     if movie is None:
         abort(404)
     trailer_video_id = get_trailer(movie.Title)
-    return render_template('movie.html', movie=movie, username=username,ratings_reviews=ratings_reviews, trailer_video_id=trailer_video_id)
+    playlists = Playlist.query.filter_by(username=username).all()
+    return render_template('movie.html', movie=movie, username=username,ratings_reviews=ratings_reviews, trailer_video_id=trailer_video_id, playlists=playlists)
 
 
 def get_trailer(movie_title):
@@ -737,3 +738,47 @@ def process_refund(ticket_id):
 
 
 
+
+
+
+
+
+
+
+@app.route('/playlists')
+def playlists():
+    # Retrieve all playlists for the current user
+    current_username = session.get('username')
+    playlists = Playlist.query.filter_by(username=current_username).all()
+    return render_template('playlists.html', playlists=playlists)
+
+@app.route('/playlist/<int:playlist_id>')
+def playlist_details(playlist_id):
+    # Retrieve the playlist details and its associated movies
+    playlist = Playlist.query.get_or_404(playlist_id)
+    movies = Movie_Data.query.join(PlaylistItem).filter(PlaylistItem.playlist_id == playlist_id).all()
+    return render_template('playlist_details.html', playlist=playlist, movies=movies)
+
+
+@app.route('/create_playlist', methods=['POST'])
+def create_playlist():
+    # Create a new playlist
+    name = request.form.get('playlist_name')
+    current_username = session.get('username')
+    playlist = Playlist(name=name, username=current_username)
+    db.session.add(playlist)
+    db.session.commit()
+    return redirect(url_for('playlists', username=current_username))
+
+@app.route('/add_to_playlist', methods=['POST'])
+def add_to_playlist():
+    # Add a movie to a playlist
+    playlist_id = request.form.get('playlist_id')
+    movie_rank = request.form.get('movie_rank')  # Ensure movie_rank is retrieved correctly
+    if playlist_id is None or movie_rank is None:
+        # Handle error appropriately
+        return "Error: Missing data"
+    playlist_item = PlaylistItem(playlist_id=playlist_id, movie_rank=movie_rank)
+    db.session.add(playlist_item)
+    db.session.commit()
+    return redirect(url_for('playlist_details', playlist_id=playlist_id))

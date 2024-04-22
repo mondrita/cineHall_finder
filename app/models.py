@@ -206,4 +206,13 @@ class Voucher(db.Model):
         return f'<Voucher {self.type} - {self.discount}% off>'
 
 
+class Playlist(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    username = db.Column(db.String(80), db.ForeignKey('user.username'), nullable=False)
+    user = db.relationship('User', backref='playlists')
 
+class PlaylistItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    playlist_id = db.Column(db.Integer, db.ForeignKey('playlist.id'), nullable=False)
+    movie_rank = db.Column(db.Integer, db.ForeignKey('Movie_Data.Rank'), nullable=False)

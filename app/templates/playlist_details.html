@@ -1,0 +1,11 @@
+{% extends 'base1.html' %}
+
+{% block content %}
+    <h1>{{ playlist.name }}</h1>
+    <ul>
+        {% for movie in movies %}
+            <li>{{ movie.Title }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

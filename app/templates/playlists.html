@@ -1,0 +1,18 @@
+{% extends 'base1.html' %}
+
+{% block content %}
+    <h1>My Playlists</h1>
+    <ul>
+        {% for playlist in playlists %}
+            <li><a href="/playlist/{{ playlist.id }}">{{ playlist.name }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <h2>Create New Playlist</h2>
+    <form action="{{ url_for('create_playlist') }}" method="POST">
+        <label for="playlist_name">Playlist Name:</label>
+        <input type="text" id="playlist_name" name="playlist_name" required>
+        <input type="hidden" name="user_id" value="{{ user_id }}">
+        <button type="submit">Create Playlist</button>
+    </form>
+{% endblock %}

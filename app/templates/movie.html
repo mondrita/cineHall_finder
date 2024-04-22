@@ -114,6 +114,21 @@
             <input type="hidden" name="user_id" value="{{ user_id }}">
             <button type="submit" class="rating-review-btn">Add to Watchlist</button>
         </form>
+
+        <!-- Form to add to playlist -->
+        <form action="{{ url_for('add_to_playlist') }}" method="POST">
+            <input type="hidden" name="Rank" value="{{ movie.Rank }}">
+            <label for="playlist_id">Add to Playlist:</label>
+            <select name="playlist_id">
+                {% for playlist in playlists %}
+                    <option value="{{ playlist.id }}">{{ playlist.name }}</option>
+                {% endfor %}
+            </select>
+            <!-- Add the movie_rank input field here -->
+            <input type="hidden" name="movie_rank" value="{{ movie.Rank }}">
+            <button type="submit" class="rating-review-btn">Add to Playlist</button>
+        </form>
+
         <a href="/movie/{{ movie.Rank }}/rate_review?username={{ username }}" class="rating-review-btn">Rate and Review this Movie</a>
 
         <div class="ratings-reviews">
