@@ -1,18 +1,30 @@
 {% extends 'base1.html' %}
 
 {% block content %}
-    <h1>My Playlists</h1>
-    <ul>
-        {% for playlist in playlists %}
-            <li><a href="/playlist/{{ playlist.id }}">{{ playlist.name }}</a></li>
-        {% endfor %}
-    </ul>
+<div class="full-screen-container" style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #c6b1cd;">
+    <div class="content-container" style="text-align: center; background-color: #9e87a5; width: 80%; height: 70vh; max-width: 900px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 40px; border-radius: 10px;">
+        <!-- Create New Playlist Form -->
+        <h2 style="color: #392f55; margin-bottom: 20px;">Create New Playlist</h2>
+        <form action="{{ url_for('create_playlist') }}" method="POST" style="margin-bottom: 20px;">
+            <label for="playlist_name" style="color: #392f55; font-size: 16px; margin-right: 10px;">Playlist Name:</label>
+            <input type="text" id="playlist_name" name="playlist_name" required style="padding: 8px; border: 1px solid #392f55; border-radius: 5px; margin-right: 10px; width: 200px;">
+            <input type="hidden" name="user_id" value="{{ user_id }}">
+            //<button type="submit" style="background-color: #392f55; color: white; padding: 8px 20px; border: none; border-radius: 5px;">Create Playlist</button>
+        </form>
 
-    <h2>Create New Playlist</h2>
-    <form action="{{ url_for('create_playlist') }}" method="POST">
-        <label for="playlist_name">Playlist Name:</label>
-        <input type="text" id="playlist_name" name="playlist_name" required>
-        <input type="hidden" name="user_id" value="{{ user_id }}">
-        <button type="submit">Create Playlist</button>
-    </form>
+        <!-- Playlists Container -->
+        <h1 style="color: #392f55; margin-bottom: 50px;">My Playlists</h1>
+        <div style="margin-bottom: 30px; display: flex; justify-content: center;">
+            <ul style="list-style: none; padding: 0;">
+                {% for playlist in playlists %}
+                    <li style="margin-bottom: 30px;">
+                        <div style="background-color: #5b506b; padding: 15px; border-radius: 8px; width: 120%;">
+                            <a href="/playlist/{{ playlist.id }}" style="text-decoration: none; color: white; font-size: 18px;">{{ playlist.name }}</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
 {% endblock %}
