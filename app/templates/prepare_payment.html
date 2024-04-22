@@ -36,7 +36,10 @@
     <h2>Select Payment Method</h2>
     <div class="info">
         <strong>Movie Title:</strong> {{ movie_title }}<br>
-        <strong>Ticket Price:</strong> Tk.{{ ticket_price }}<br>
+        <strong>Ticket Price:</strong> Tk.{{ original_price }}<br>
+        {% if discounted_price != ticket_price %}
+            <strong>Discounted Price:</strong> Tk.{{ ticket_price }}<br>
+        {% endif %}
         <strong>Format:</strong> {{ format }}<br>
         <strong>Time:</strong> {{ time }}<br>
         <strong>Date:</strong> {{ date }}<br>
@@ -60,4 +63,3 @@
     </form>
 </div>
 {% endblock %}
-

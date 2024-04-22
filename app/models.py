@@ -39,7 +39,7 @@ class User(db.Model):
     points = db.Column(db.Integer, default=0, nullable=False)
 
     vouchers = db.relationship('Voucher', secondary=user_vouchers,
-                               backref=db.backref('users', lazy='dynamic'))
+                               backref=db.backref('users', lazy=True))
 
     friends = relationship(
         'User',
@@ -193,6 +193,7 @@ class SoldTicket(db.Model):
 
     def __repr__(self):
         return f"<SoldTicket(username='{self.username}', movie_title='{self.movie_title}', date='{self.date}', time='{self.time}', format='{self.format}', ticket_price='{self.ticket_price}')>"
+
 
 
 class Voucher(db.Model):
