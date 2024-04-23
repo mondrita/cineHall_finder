@@ -55,7 +55,7 @@
 
     .redeem-button {
         padding: 10px 20px;
-        background-color: #007BFF;
+        background-color: #799ec5;
         color: white;
         border: none;
         border-radius: 5px;
@@ -64,7 +64,7 @@
     }
 
     .redeem-button:hover {
-        background-color: #0056b3;
+        background-color: #536679;
     }
 </style>
 
@@ -83,7 +83,7 @@
                 <li class="voucher-item">
                     <span class="voucher-name">🔩Iron (1000 points)</span>
                     {% if points >= 1000 %}
-                    <button type="submit" name="voucher_type" value="Iron">Redeem</button>
+                    <button type="submit" name="voucher_type" class="redeem-button" value="Iron">Redeem</button>
                     {% else %}
                     <span class="unavailable">Unavailable</span>
                     {% endif %}
@@ -91,7 +91,7 @@
                 <li class="voucher-item">
                     <span class="voucher-name">🥉Bronze (5000 points)</span>
                     {% if points >= 5000 %}
-                    <button type="submit" name="voucher_type" value="Bronze">Redeem</button>
+                    <button type="submit" class="redeem-button" name="voucher_type" value="Bronze">Redeem</button>
                     {% else %}
                     <span class="unavailable">Unavailable</span>
                     {% endif %}
@@ -99,7 +99,7 @@
                 <li class="voucher-item">
                     <span class="voucher-name">🥈Silver (10000 points)</span>
                     {% if points >= 10000 %}
-                    <button type="submit" name="voucher_type" value="Silver">Redeem</button>
+                    <button type="submit" class="redeem-button" button name="voucher_type" value="Silver">Redeem</button>
                     {% else %}
                     <span class="unavailable">Unavailable</span>
                     {% endif %}
@@ -107,7 +107,7 @@
                 <li class="voucher-item">
                     <span class="voucher-name">🥇Gold (15000 points)</span>
                     {% if points >= 15000 %}
-                    <button type="submit" name="voucher_type" value="Gold">Redeem</button>
+                    <button type="submit" class="redeem-button" button name="voucher_type" value="Gold">Redeem</button>
                     {% else %}
                     <span class="unavailable">Unavailable</span>
                     {% endif %}
@@ -115,7 +115,7 @@
                 <li class="voucher-item">
                     <span class="voucher-name">🎁Platinum (20000 points)</span>
                     {% if points >= 20000 %}
-                    <button type="submit" name="voucher_type" value="Platinum">Redeem</button>
+                    <button type="submit" class="redeem-button" name="voucher_type" value="Platinum">Redeem</button>
                     {% else %}
                     <span class="unavailable">Unavailable</span>
                     {% endif %}

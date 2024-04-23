@@ -197,7 +197,8 @@ def movie_page(Rank,username):
 
 
 def get_trailer(movie_title):
-    api_key = 'AIzaSyDrhXeRaiBtJHS_VKbBzEX3tbnd9JwXEyU'
+    api_key ='AIzaSyDrZnh6UFDvNfK6ysuqvGz7kwt1S4HkoS4'
+    #api_key='AIzaSyDfhqXgkKqxU3hnz6qRprQhbRXjXeWkD8E'
     youtube = build('youtube', 'v3', developerKey=api_key)
     search_response = youtube.search().list(
         q=movie_title + " trailer",
@@ -817,14 +818,15 @@ def playlists():
     # Retrieve all playlists for the current user
     current_username = session.get('username')
     playlists = Playlist.query.filter_by(username=current_username).all()
-    return render_template('playlists.html', playlists=playlists)
+    return render_template('playlists.html', playlists=playlists, username=current_username)
 
 @app.route('/playlist/<int:playlist_id>')
 def playlist_details(playlist_id):
     # Retrieve the playlist details and its associated movies
+    current_username = session.get('username')
     playlist = Playlist.query.get_or_404(playlist_id)
     movies = Movie_Data.query.join(PlaylistItem).filter(PlaylistItem.playlist_id == playlist_id).all()
-    return render_template('playlist_details.html', playlist=playlist, movies=movies)
+    return render_template('playlist_details.html', playlist=playlist, movies=movies, username=current_username)
 
 
 @app.route('/create_playlist', methods=['POST'])

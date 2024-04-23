@@ -1,6 +1,20 @@
 {% extends 'base1.html' %}
 
 {% block content %}
+<style>
+    .movie-box {
+        transition: transform 0.3s ease;
+    }
+    
+    .movie-box:hover {
+        transform: translateY(-5px);
+    }
+
+    .movie-box h2,
+    .movie-box p {
+        margin: 0;
+    }
+</style>
 <div class="full-screen-container" style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #c6b1cd;">
     <div class="content-container" style="text-align: center; background-color: #9e87a5; width: 80%; max-width: 900px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 40px; border-radius: 10px;">
         <h1 style="color: #392f55; margin-bottom: 20px;">{{ playlist.name }}</h1>
@@ -10,9 +24,10 @@
             <ul style="list-style: none; padding: 0;">
                 {% for movie in movies %}
                     <li style="margin-bottom: 20px; display: flex; justify-content: center;">
-                        <div style="background-color: #5b506b; padding: 10px; border-radius: 8px; text-align: center; width: 70%;">
+                        <div class="movie-box" style="background-color: #5d536c; padding: 8px; border-radius: 8px; text-align: center; width: 40%;">
                             <h2 style="color: white; margin-bottom: 5px; font-size: 18px;">{{ movie.Title }}</h2>
                             <p style="color: white; margin-bottom: 5px;">Year: {{ movie.Year }}</p>
+                            <p style="color: white; margin-bottom: 5px;">Genre: {{ movie.Genre }}</p>
                         </div>
                     </li>
                 {% endfor %}
