@@ -1,123 +1,504 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>Theatre Website</title>
+<title>Cinehall Finder - Premium Movie Experience</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 <style>
-    /* CSS for positioning the heading */
-    .heading-container {
-        text-align: center;
-        margin-top: -3cm; /* Adjust this value as needed */
-        margin-bottom: 20px;
+    /* Base styles */
+    :root {
+        --purple-dark: #2d1b4e;
+        --purple-medium: #44337a;
+        --purple-light: #9f7aea;
+        --purple-lighter: #d6bcfa;
+        --white: #ffffff;
+        --off-white: #f7fafc;
+        --gray-light: #e2e8f0;
+        --gray: #a0aec0;
+        --black: #000000;
+        --black-light: #1a202c;
     }
 
-    /* CSS for positioning the buttons */
-    .btn-container {
-        text-align: center;
-        margin-top: 4cm; /* Adjust this value as needed */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
 
-    /* CSS for the background image */
     body {
-        background-image: url('/static/img1.jpg'); /* Set the background image */
+        font-family: 'Montserrat', sans-serif;
+        background-color: var(--black);
+        color: var(--white);
+        line-height: 1.6;
+    }
+
+    /* Layout */
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    /* Header */
+    .header {
+        padding: 1.5rem 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 100;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0) 100%);
+    }
+
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--white);
+        text-decoration: none;
+        letter-spacing: 1px;
+    }
+
+    .logo span {
+        color: var(--purple-light);
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 2rem;
+    }
+
+    .nav-link {
+        color: var(--gray-light);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+        color: var(--purple-light);
+    }
+
+    /* Hero Section */
+    .hero {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('{{ url_for("static", filename="img1.jpg") }}');
         background-size: cover;
         background-position: center;
+        filter: brightness(0.4) contrast(1.2);
+        z-index: -1;
     }
 
-    /* CSS for glowing effect */
-    .glow {
-        animation: glow 15s ease-in-out infinite alternate;
-        color: #31163d; /* Change text color to #884EA0 */
+    .hero::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at center, rgba(45, 27, 78, 0.3) 0%, rgba(0, 0, 0, 0.8) 100%);
+        z-index: -1;
     }
 
-    @keyframes glow {
-        from {
-            text-shadow: 0 0 10px #989599, 0 0 20px #989599, 0 0 30px#989599, 0 0 40px #989599, 0 0 50px #989599;
-        }
-        to {
-            text-shadow: 0 0 20px #cecccf, 0 0 30px  #cecccf, 0 0 40px #cecccf, 0 0 50px  #cecccf;
-        }
+    .hero-content {
+        max-width: 700px;
+        animation: fadeIn 1.5s ease-out;
     }
 
-    /* CSS for videos */
-    video {
-        width: 250px; /* Adjust width as needed */
-        height: 125px; /* Adjust height as needed */
+    .hero-subtitle {
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: var(--purple-lighter);
+        margin-bottom: 1rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
     }
 
-    /* CSS for buttons */
+    .hero-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 4rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+        background: linear-gradient(to right, var(--white) 0%, var(--purple-lighter) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-fill-color: transparent;
+    }
+
+    .hero-description {
+        font-size: 1.1rem;
+        color: var(--gray-light);
+        margin-bottom: 2.5rem;
+        max-width: 600px;
+    }
+
+    /* Buttons */
+    .btn-group {
+        display: flex;
+        gap: 1rem;
+    }
+
     .btn {
-        font-size: 20px; /* Adjust font size as needed */
-        padding: 10px 20px; /* Adjust padding as needed */
+        display: inline-block;
+        padding: 0.9rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+        letter-spacing: 0.5px;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
     }
 
-    @font-face {
-        font-family: myFont;
-        src: url('/static/poster.ttf');
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.1);
+        transition: width 0.3s ease;
+        z-index: -1;
     }
 
-    .poster {
-        font-family: myFont;
-        font-size: 55px;
-        color: #31163d;
+    .btn:hover::before {
+        width: 100%;
+    }
+
+    .btn-primary {
+        background-color: var(--purple-medium);
+        color: var(--white);
+        border: none;
+        box-shadow: 0 4px 14px rgba(68, 51, 122, 0.4);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--purple-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(68, 51, 122, 0.6);
+    }
+
+    .btn-secondary {
+        background-color: transparent;
+        color: var(--white);
+        border: 2px solid var(--purple-light);
+    }
+
+    .btn-secondary:hover {
+        background-color: rgba(159, 122, 234, 0.1);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(159, 122, 234, 0.3);
+    }
+
+    /* Features Section */
+    .features {
+        padding: 6rem 0;
+        background: linear-gradient(to bottom, var(--black) 0%, var(--black-light) 100%);
+    }
+
+    .section-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 3rem;
+        text-align: center;
+        color: var(--white);
+    }
+
+    .section-title span {
+        color: var(--purple-light);
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .feature-card {
+        background: linear-gradient(145deg, rgba(26, 32, 44, 0.8) 0%, rgba(45, 27, 78, 0.4) 100%);
+        border-radius: 8px;
+        padding: 2rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid rgba(159, 122, 234, 0.1);
+        height: 100%;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(45, 27, 78, 0.2);
+    }
+
+    .feature-icon {
+        font-size: 2.5rem;
+        color: var(--purple-light);
+        margin-bottom: 1.5rem;
+    }
+
+    .feature-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--white);
+    }
+
+    .feature-description {
+        color: var(--gray);
+        font-size: 0.95rem;
+    }
+
+    /* CTA Section */
+    .cta {
+        padding: 6rem 0;
+        background: linear-gradient(to right, var(--purple-dark) 0%, var(--black-light) 100%);
+        text-align: center;
+    }
+
+    .cta-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--white);
+    }
+
+    .cta-description {
+        font-size: 1.1rem;
+        color: var(--gray-light);
+        margin-bottom: 2.5rem;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Footer */
+    .footer {
+        padding: 3rem 0;
+        background-color: var(--black);
+        border-top: 1px solid rgba(159, 122, 234, 0.1);
+    }
+
+    .footer-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 2rem;
+    }
+
+    .footer-logo {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--white);
+        text-decoration: none;
+    }
+
+    .footer-logo span {
+        color: var(--purple-light);
+    }
+
+    .footer-links {
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    .footer-link {
+        color: var(--gray);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.3s ease;
+    }
+
+    .footer-link:hover {
+        color: var(--purple-light);
+    }
+
+    .copyright {
+        color: var(--gray);
+        font-size: 0.9rem;
+        margin-top: 2rem;
+        text-align: center;
+        width: 100%;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-delay-1 {
+        animation: fadeIn 1.5s ease-out 0.2s both;
+    }
+
+    .animate-delay-2 {
+        animation: fadeIn 1.5s ease-out 0.4s both;
+    }
+
+    .animate-delay-3 {
+        animation: fadeIn 1.5s ease-out 0.6s both;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 3rem;
+        }
+
+        .nav-links {
+            display: none;
+        }
+
+        .btn-group {
+            flex-direction: column;
+        }
+
+        .features-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .footer-container {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .footer-links {
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-title {
+            font-size: 2.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+        }
     }
 </style>
 {% endblock %}
 
 {% block body %}
-<div class="heading-container">
-    <h1 class="glow poster">WELCOME to</h1>
-    <h1 class="glow poster">CINEHALL FINDER!</h1><br><br><br><br>
-</div>
-<div class="btn-container">
-    <a href="/signup" class="btn">Sign Up Here!</a>
-    <a href="/login" class="btn">Log In</a>
-</div>
-<div class="photo-container">
-    <div class="photo-left">
-        <video autoplay loop muted>
-            <source src="/static/video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <video autoplay loop muted>
-            <source src="/static/video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <video autoplay loop muted>
-            <source src="/static/video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <video autoplay loop muted>
-            <source src="/static/video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <video autoplay loop muted>
-            <source src="/static/video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+<!-- Header -->
+<header class="header">
+    <div class="container header-container">
+        <a href="#" class="logo">Cine<span>Hall</span></a>
+        <nav class="nav-links">
+            <a href="#" class="nav-link">Home</a>
+            <a href="#" class="nav-link">Movies</a>
+            <a href="#" class="nav-link">Theaters</a>
+            <a href="#" class="nav-link">About</a>
+            <a href="#" class="nav-link">Contact</a>
+        </nav>
     </div>
+</header>
 
-    
-    <div class="photo-right">
-        <video autoplay loop muted>
-            <source src="/static/video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <video autoplay loop muted>
-            <source src="/static/video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <video autoplay loop muted>
-            <source src="/static/video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <video autoplay loop muted>
-            <source src="/static/video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <video autoplay loop muted>
-            <source src="/static/video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h2 class="hero-subtitle animate-delay-1">Premium Movie Experience</h2>
+            <h1 class="hero-title">Discover the Perfect Cinema Experience</h1>
+            <p class="hero-description animate-delay-2">
+                Find and book tickets for the latest movies in premium theaters near you. 
+                Enjoy state-of-the-art sound systems, comfortable seating, and an unforgettable cinematic journey.
+            </p>
+            <div class="btn-group animate-delay-3">
+                <a href="{{ url_for('signup') }}" class="btn btn-primary">Sign Up Now</a>
+                <a href="{{ url_for('login') }}" class="btn btn-secondary">Log In</a>
+            </div>
+        </div>
     </div>
-</div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <div class="container">
+        <h2 class="section-title">Why Choose <span>CineHall</span></h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎬</div>
+                <h3 class="feature-title">Latest Releases</h3>
+                <p class="feature-description">
+                    Get access to the newest movie releases as soon as they hit theaters, with real-time updates and notifications.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎟️</div>
+                <h3 class="feature-title">Easy Booking</h3>
+                <p class="feature-description">
+                    Book your tickets in seconds with our streamlined process. Select your seats, pay online, and receive instant confirmation.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🍿</div>
+                <h3 class="feature-title">Premium Experience</h3>
+                <p class="feature-description">
+                    Enjoy luxury seating, state-of-the-art sound systems, and premium concessions for the ultimate movie experience.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta">
+    <div class="container">
+        <h2 class="cta-title">Ready for Your Next Movie Night?</h2>
+        <p class="cta-description">
+            Join thousands of movie enthusiasts who have already discovered the perfect way to enjoy cinema. 
+            Sign up today and get exclusive access to special offers and premieres.
+        </p>
+        <a href="{{ url_for('signup') }}" class="btn btn-primary">Get Started</a>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container footer-container">
+        <a href="#" class="footer-logo">Cine<span>Hall</span></a>
+        <div class="footer-links">
+            <a href="#" class="footer-link">Privacy Policy</a>
+            <a href="#" class="footer-link">Terms of Service</a>
+            <a href="#" class="footer-link">FAQ</a>
+            <a href="#" class="footer-link">Support</a>
+        </div>
+        <div class="copyright">
+            &copy; {{year}} CineHall Finder. All rights reserved.
+        </div>
+    </div>
+</footer>
 {% endblock %}

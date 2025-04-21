@@ -392,9 +392,6 @@ def remove_from_wishlist(Rank):
 
 
 
-
-
-
 from datetime import datetime
 
 @app.route('/current_movies/<username>')
